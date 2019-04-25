@@ -135,7 +135,27 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Dependancies\glad.c" />
+    <ClCompile Include="src\engine\common\Path.cpp" />
+    <ClCompile Include="src\engine\graphics\Shader.cpp" />
+    <ClCompile Include="src\engine\graphics\Texture2D.cpp" />
+    <ClCompile Include="src\engine\objects\Actor.cpp" />
+    <ClCompile Include="src\engine\objects\Component.cpp" />
+    <ClCompile Include="src\engine\objects\Object.cpp" />
     <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Dependancies\Includes\stb_image\stb_image.h" />
+    <ClInclude Include="src\engine\common\Includes.h" />
+    <ClInclude Include="src\engine\common\Path.h" />
+    <ClInclude Include="src\engine\graphics\Shader.h" />
+    <ClInclude Include="src\engine\graphics\Texture2D.h" />
+    <ClInclude Include="src\engine\objects\Actor.h" />
+    <ClInclude Include="src\engine\objects\Component.h" />
+    <ClInclude Include="src\engine\objects\Object.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\resources\shaders\basic\basic.frag" />
+    <None Include="src\resources\shaders\basic\basic.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,0 +1,21 @@
+#include "../../common/Includes.h"
+
+#include "BufferLayout.h"
+
+#ifndef VERTEXARRAYOBJECT
+#define VERTEXARRAYOBJECT
+
+class VertexArrayObject {
+public:
+	VertexArrayObject();
+	~VertexArrayObject();
+
+	void formatBuffer(const BufferLayout &layout);
+
+	void bind();
+	void unbind();
+private:
+	unsigned int renderID;
+};
+
+#endif // !VERTEXARRAYOBJECT

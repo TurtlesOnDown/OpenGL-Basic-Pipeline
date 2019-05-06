@@ -136,6 +136,11 @@
   <ItemGroup>
     <ClCompile Include="Dependancies\glad.c" />
     <ClCompile Include="src\engine\common\Path.cpp" />
+    <ClCompile Include="src\engine\graphics\buffers\BufferLayout.cpp" />
+    <ClCompile Include="src\engine\graphics\buffers\GLBuffer.cpp" />
+    <ClCompile Include="src\engine\graphics\buffers\IndexBuffer.cpp" />
+    <ClCompile Include="src\engine\graphics\buffers\VertexArrayObject.cpp" />
+    <ClCompile Include="src\engine\graphics\buffers\VertexBuffer.cpp" />
     <ClCompile Include="src\engine\graphics\Shader.cpp" />
     <ClCompile Include="src\engine\graphics\Texture2D.cpp" />
     <ClCompile Include="src\engine\objects\Actor.cpp" />
@@ -147,6 +152,11 @@
     <ClInclude Include="Dependancies\Includes\stb_image\stb_image.h" />
     <ClInclude Include="src\engine\common\Includes.h" />
     <ClInclude Include="src\engine\common\Path.h" />
+    <ClInclude Include="src\engine\graphics\buffers\BufferLayout.h" />
+    <ClInclude Include="src\engine\graphics\buffers\GLBuffer.h" />
+    <ClInclude Include="src\engine\graphics\buffers\IndexBuffer.h" />
+    <ClInclude Include="src\engine\graphics\buffers\VertexArrayObject.h" />
+    <ClInclude Include="src\engine\graphics\buffers\VertexBuffer.h" />
     <ClInclude Include="src\engine\graphics\Shader.h" />
     <ClInclude Include="src\engine\graphics\Texture2D.h" />
     <ClInclude Include="src\engine\objects\Actor.h" />

@@ -20,7 +20,9 @@ public:
 	void setFilteringParam(int min = GL_NEAREST, int mag = GL_LINEAR);
 	void genMipMaps();
 
-	void activateTexure(unsigned int num);
+	void activateTexture(unsigned int num);
+
+	inline unsigned int getOpenGLID() const { return texture; };
 
 private:
 	int width, height, nrChannels;

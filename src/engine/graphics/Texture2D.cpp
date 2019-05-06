@@ -71,7 +71,7 @@ void Texture2D::genMipMaps() {
 	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
-void Texture2D::activateTexure(unsigned int num) {
+void Texture2D::activateTexture(unsigned int num) {
 	glActiveTexture(GL_TEXTURE0 + num);
 	bind();
 }

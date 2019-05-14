@@ -1,3 +1,5 @@
+#include "../common/Includes.h"
+
 #ifndef OBJECT
 #define OBJECT
 

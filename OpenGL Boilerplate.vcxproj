@@ -141,9 +141,10 @@
     <ClCompile Include="src\engine\graphics\buffers\IndexBuffer.cpp" />
     <ClCompile Include="src\engine\graphics\buffers\VertexArrayObject.cpp" />
     <ClCompile Include="src\engine\graphics\buffers\VertexBuffer.cpp" />
+    <ClCompile Include="src\engine\graphics\camera\Camera.cpp" />
     <ClCompile Include="src\engine\graphics\Shader.cpp" />
     <ClCompile Include="src\engine\graphics\Texture2D.cpp" />
-    <ClCompile Include="src\engine\objects\Actor.cpp" />
+    <ClCompile Include="src\engine\objects\PObject.cpp" />
     <ClCompile Include="src\engine\objects\Component.cpp" />
     <ClCompile Include="src\engine\objects\Object.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -157,9 +158,10 @@
     <ClInclude Include="src\engine\graphics\buffers\IndexBuffer.h" />
     <ClInclude Include="src\engine\graphics\buffers\VertexArrayObject.h" />
     <ClInclude Include="src\engine\graphics\buffers\VertexBuffer.h" />
+    <ClInclude Include="src\engine\graphics\camera\Camera.h" />
     <ClInclude Include="src\engine\graphics\Shader.h" />
     <ClInclude Include="src\engine\graphics\Texture2D.h" />
-    <ClInclude Include="src\engine\objects\Actor.h" />
+    <ClInclude Include="src\engine\objects\PObject.h" />
     <ClInclude Include="src\engine\objects\Component.h" />
     <ClInclude Include="src\engine\objects\Object.h" />
   </ItemGroup>

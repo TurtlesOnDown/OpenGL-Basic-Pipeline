@@ -1,6 +1,10 @@
 #include "Object.h"
 #include <glm/gtc/quaternion.hpp>
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 #ifndef POBJECT
 #define POBJECT
 

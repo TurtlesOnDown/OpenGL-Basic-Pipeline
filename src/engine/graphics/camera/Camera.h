@@ -1,8 +1,9 @@
 #include "../../objects/PObject.h"
 
+#ifndef CAMERACLASS
+#define CAMERACLASS
 
-#ifndef CAMERA
-#define CAMERA
+// camera class object for use in world
 
 class Camera : public PObject {
 public:

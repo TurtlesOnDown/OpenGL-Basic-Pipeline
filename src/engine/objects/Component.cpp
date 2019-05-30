@@ -1,6 +1,6 @@
 #include "Component.h"
 
-Component::Component() {
+Component::Component(COMPONENT_TYPE t):type(t) {
 
 }
 

@@ -6,14 +6,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "engine/graphics/Shader.h"
-#include "engine/graphics/Texture2D.h"
-#include "engine/graphics/buffers/VertexBuffer.h"
-#include "engine/graphics/buffers/IndexBuffer.h"
-#include "engine/graphics/buffers/VertexArrayObject.h"
+#include "engine/import manager/ImportManager.h"
 #include "engine/graphics/camera/Camera.h"
+#include "engine/objects/PObject.h"
 
 #include <iostream>
+
+ImportManager resourceManager;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -73,85 +72,33 @@ int main()
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
 
-	Path vert("src//resources//shaders//basic//basic.vert");
-	Path frag("src//resources//shaders//basic//basic.frag");
+	Path shaderfile("src\\resources\\shaders\\basic\\basic.shad");
 
-	// build and compile our shader zprogram
-	// ------------------------------------
-	Shader ourShader(vert, frag);
+	Path modelPath("src\\resources\\models\\nanosuit\\nanosuit.obj");
+	std::shared_ptr<Model> testModel = resourceManager.load<Model>(modelPath);
 
-	// set up vertex data (and buffer(s)) and configure vertex attributes
-	// ------------------------------------------------------------------
-	float vertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+	std::shared_ptr<Model> testModel2 = resourceManager.load<Model>(modelPath);
 
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+	std::shared_ptr<Shader> ourShader = resourceManager.load<Shader>(shaderfile);
 
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+	Path container("src\\resources\\textures\\container.jpg");
+	std::shared_ptr<Texture2D> texture = resourceManager.load<Texture2D>(container);
 
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+	std::shared_ptr<Material> testMaterial(new Material());
+	testMaterial->addTexture2D("texture_diffuse0",texture);
 
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+	PObject testObject;
+	testObject.addComponent(COMPONENT_TYPE::MATERIAL, testMaterial);
+	testObject.addComponent(COMPONENT_TYPE::MODEL, testModel);
 
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f
-	};
-	unsigned int indices[] = {
-		0, 1, 3, // first triangle
-		1, 2, 3  // second triangle
-	};
-	VertexBuffer vertBuffer;
-	VertexArrayObject vertArrayObj;
-	IndexBuffer indexBuffer;
+	testModel2->setMaterial(0, *testMaterial); // fix this
+	PObject testObject2({25, 0, 0});
+	testObject2.addComponent(COMPONENT_TYPE::MATERIAL, testMaterial);
+	testObject2.addComponent(COMPONENT_TYPE::MODEL, testModel2);
 
-	vertArrayObj.bind();
-
-	vertBuffer.bind();
-	vertBuffer.fillData(sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	indexBuffer.bind();
-	indexBuffer.fillData(sizeof(indices), indices, GL_STATIC_DRAW);
-
-	BufferLayout bufflayout;
-
-	bufflayout.Push<float>(3, false);
-	bufflayout.Push<float>(2, false);
-	bufflayout.Push<float>(3, false);
-
-	vertArrayObj.formatBuffer(bufflayout);
-
-	Path container("src//resources//textures//container.jpg");
-	Texture2D texture(container);
-	texture.init();
+	// create transformations
+	glm::mat4 projection = glm::mat4(1.0f);
+	projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 	// render loop
 	// -----------
@@ -165,31 +112,16 @@ int main()
 		// -----
 		processInput(window);
 
-
 		// render
 		// ------
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// bind Texture
-		texture.activateTexture(0);
-
-		//testCam.translate({ (sin(currentFrame) * 0.1f) / 2,0.0f,0.0f });
-
-		// create transformations
-		glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-		glm::mat4 projection = glm::mat4(1.0f);
-		//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
-		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		//testObject.translate({ sin(currentFrame) * 0.2f, 0.0f, 0.0f });
 
 		// render container
-		ourShader.use();
-		ourShader.setMat4("model", model);
-		ourShader.setMat4("view", camera.getViewMatrix());
-		ourShader.setMat4("projection", projection);
-		ourShader.setInt("texture1", 0);
-		vertArrayObj.bind();
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		draw(testObject, camera, projection, ourShader);
+		draw(testObject2, camera, projection, ourShader);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------

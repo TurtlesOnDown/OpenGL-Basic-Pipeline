@@ -1,12 +1,15 @@
 #include "Object.h"
 #include <glm/gtc/quaternion.hpp>
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+#include "../import manager/shader/Shader.h"
+#include "Component.h"
 
-#ifndef POBJECT
-#define POBJECT
+#ifndef POBJECTCLASS
+#define POBJECTCLASS
+
+// Placeable object that have a location, direction, and a size. Can have attached components
+
+class Camera; // TODO remove when fixing draw function
 
 enum class SPACE {WORLD, LOCAL};
 
@@ -16,14 +19,17 @@ public:
 	virtual ~PObject() override;
 
 	void translate(glm::vec3 trans);
-	void rotate(float angle, glm::vec3 axis, SPACE relativeTo);
+	void rotate(float angle, glm::vec3 axis, SPACE relativeTo); // Angle in radians, axis to rotate around, and relative space
 
 	inline const glm::vec3 &getPosition() const { return position; }
 
 	const glm::vec3& getFront();
 	const glm::vec3& getRight();
 	const glm::vec3& getUp();
-	
+
+	inline void addComponent(COMPONENT_TYPE type, std::shared_ptr<Component> comp) { components[type] = comp; }
+
+	friend void draw(PObject& m, Camera &cam, glm::mat4& proj, const std::shared_ptr<Shader> shader);
 protected:
 	glm::vec3 position;
 	glm::quat orientation;
@@ -34,8 +40,12 @@ protected:
 
 	bool updated = false;
 
+	std::map<COMPONENT_TYPE, std::shared_ptr<Component>> components;
+
 	virtual void updateVectors();
 };
 
-#endif // !ACTOR
+void draw(PObject& m, Camera& cam, glm::mat4& proj, const std::shared_ptr<Shader> shader); // easily replacable draw function
+
+#endif // !POBJECTCLASS
 

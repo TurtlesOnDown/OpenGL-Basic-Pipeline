@@ -1,7 +1,10 @@
 #include "../../common/Includes.h"
 
-#ifndef GLBUFFER
-#define GLBUFFER
+#ifndef GLBUFFERCLASS
+#define GLBUFFERCLASS
+
+// Buffer Base class for others to derive from
+// TODO: Edit so that buffer aren't generated on construction
 
 class GLBuffer {
 public:

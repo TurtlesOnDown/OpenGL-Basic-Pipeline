@@ -1,7 +1,7 @@
 #include "../../common/Includes.h"
 
-#ifndef BUFFERLAYOUT
-#define BUFFERLAYOUT
+#ifndef BUFFERLAYOUTCLASS
+#define BUFFERLAYOUTCLASS
 
 struct BufferElement {
 	unsigned int count;
@@ -10,6 +10,9 @@ struct BufferElement {
 	unsigned int offset;
 	bool normalized;
 };
+
+// Layout class for VertexArrayObjects
+// TODO: Add functions for other data types
 
 class BufferLayout {
 public:

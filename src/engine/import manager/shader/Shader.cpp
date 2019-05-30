@@ -3,15 +3,80 @@
 #include <fstream>
 #include <sstream>
 
-Shader::Shader(Path& vertPath, Path& fragPath) {
-	compileShader(vertPath.getPath(), fragPath.getPath());
+Shader::Shader(Path& shaderfile) :Component(COMPONENT_TYPE::SHADER),path(shaderfile) {
+	
 }
 
 Shader::~Shader() {
 
 }
 
-void Shader::compileShader(std::string vertPath, std::string fragPath) {
+void Shader::use() {
+	glUseProgram(ID);
+}
+
+void Shader::setBool(const std::string& name, bool value) const {
+	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+}
+
+void Shader::setInt(const std::string& name, int value) const {
+	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+}
+
+void Shader::setFloat(const std::string& name, float value) const {
+	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+}
+
+void Shader::setMat4(const std::string& name, const glm::mat4& mat) const
+{
+	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+
+
+ShaderImporter::ShaderImporter(ImportManager *imp):manager(imp) {
+
+}
+
+ShaderImporter::~ShaderImporter() {
+
+}
+
+std::shared_ptr<Shader> ShaderImporter::load(Path& p) {
+	if (shaders.find(p.getPath()) != shaders.end()) {
+		return shaders[p.getPath()];
+	}
+
+	std::shared_ptr<Shader> ret = std::shared_ptr<Shader>(new Shader(p));
+	shaders[p.getPath()] = ret;
+	importShader(ret);
+	return ret;
+}
+
+void ShaderImporter::importShader(std::shared_ptr<Shader> shader) {
+	std::ifstream lshaderFile;
+	std::string vertexPath;
+	std::string fragmentPath;
+
+	try {
+		// open file
+		lshaderFile.open(shader->path.getPath());
+		// get vertex path
+		std::getline(lshaderFile, vertexPath);
+		// get fragment path
+		std::getline(lshaderFile, fragmentPath);
+		// close file
+		lshaderFile.close();
+	}
+	catch (std::ifstream::failure e)
+	{
+		std::cout << "SHADER::UNABLE TO LOAD SHAD FILE" << std::endl;
+		return;
+	}
+
+	compileShader(shader, shader->path.getDirectory() + vertexPath, shader->path.getDirectory() + fragmentPath);
+}
+
+void ShaderImporter::compileShader(std::shared_ptr<Shader> shader, std::string vertPath, std::string fragPath) {
 	std::ifstream vShaderFile;
 	std::ifstream fShaderFile;
 
@@ -59,44 +124,17 @@ void Shader::compileShader(std::string vertPath, std::string fragPath) {
 	glCompileShader(fragment);
 	checkCompileErrors(fragment, "FRAGMENT");
 	// shader Program
-	ID = glCreateProgram();
-	glAttachShader(ID, vertex);
-	glAttachShader(ID, fragment);
-	glLinkProgram(ID);
-	checkCompileErrors(ID, "PROGRAM");
+	shader->ID = glCreateProgram();
+	glAttachShader(shader->ID, vertex);
+	glAttachShader(shader->ID, fragment);
+	glLinkProgram(shader->ID);
+	checkCompileErrors(shader->ID, "PROGRAM");
 	// delete the shaders as they're linked into our program now and no longer necessary
 	glDeleteShader(vertex);
 	glDeleteShader(fragment);
-
-	initialized = true;
 }
 
-void Shader::use() {
-	glUseProgram(ID);
-}
-
-void Shader::setBool(const std::string& name, bool value) const {
-	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
-}
-
-void Shader::setInt(const std::string& name, int value) const {
-	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
-}
-
-void Shader::setFloat(const std::string& name, float value) const {
-	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
-}
-
-void Shader::setMat4(const std::string& name, const glm::mat4& mat) const
-{
-	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
-}
-
-
-// Private Functions
-
-void Shader::checkCompileErrors(unsigned int shader, std::string type)
-{
+void ShaderImporter::checkCompileErrors(unsigned int shader, std::string type) {
 	int success;
 	char infoLog[1024];
 	if (type != "PROGRAM")

@@ -10,7 +10,7 @@
 #define PATHDELIM '/'
 #endif
 
-#include <stdio.h>  /* defines FILENAME_MAX */
+#include <stdio.h>  // defines FILENAME_MAX
 
 #include <numeric>
 
@@ -33,7 +33,6 @@ Path::Path(std::string p) {
 	else {
 		filepath = p;
 	}
-
 
 	// parse input into tokens
 	while (filepath.size()) {
@@ -89,5 +88,6 @@ std::string Path::getPath() {
 
 std::string Path::getDirectory() {
 	std::string result = std::accumulate(path.begin() + 1, path.end(), path[0], [](std::string a, std::string b) {return a + PATHDELIM + b; });
+	result += PATHDELIM;
 	return result;
 }

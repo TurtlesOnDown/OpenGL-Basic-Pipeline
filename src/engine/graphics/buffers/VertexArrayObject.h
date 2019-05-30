@@ -2,8 +2,10 @@
 
 #include "BufferLayout.h"
 
-#ifndef VERTEXARRAYOBJECT
-#define VERTEXARRAYOBJECT
+#ifndef VERTEXARRAYOBJECTCLASS
+#define VERTEXARRAYOBJECTCLASS
+
+// OpenGL VertexArrayObject abstraction
 
 class VertexArrayObject {
 public:

@@ -136,14 +136,18 @@
   <ItemGroup>
     <ClCompile Include="Dependancies\glad.c" />
     <ClCompile Include="src\engine\common\Path.cpp" />
+    <ClCompile Include="src\engine\import manager\ImportManager.cpp" />
     <ClCompile Include="src\engine\graphics\buffers\BufferLayout.cpp" />
     <ClCompile Include="src\engine\graphics\buffers\GLBuffer.cpp" />
     <ClCompile Include="src\engine\graphics\buffers\IndexBuffer.cpp" />
     <ClCompile Include="src\engine\graphics\buffers\VertexArrayObject.cpp" />
     <ClCompile Include="src\engine\graphics\buffers\VertexBuffer.cpp" />
     <ClCompile Include="src\engine\graphics\camera\Camera.cpp" />
-    <ClCompile Include="src\engine\graphics\Shader.cpp" />
-    <ClCompile Include="src\engine\graphics\Texture2D.cpp" />
+    <ClCompile Include="src\engine\import manager\material\Material.cpp" />
+    <ClCompile Include="src\engine\import manager\model\Mesh.cpp" />
+    <ClCompile Include="src\engine\import manager\model\Model.cpp" />
+    <ClCompile Include="src\engine\import manager\shader\Shader.cpp" />
+    <ClCompile Include="src\engine\import manager\texture2D\Texture2D.cpp" />
     <ClCompile Include="src\engine\objects\PObject.cpp" />
     <ClCompile Include="src\engine\objects\Component.cpp" />
     <ClCompile Include="src\engine\objects\Object.cpp" />
@@ -153,20 +157,25 @@
     <ClInclude Include="Dependancies\Includes\stb_image\stb_image.h" />
     <ClInclude Include="src\engine\common\Includes.h" />
     <ClInclude Include="src\engine\common\Path.h" />
+    <ClInclude Include="src\engine\import manager\ImportManager.h" />
     <ClInclude Include="src\engine\graphics\buffers\BufferLayout.h" />
     <ClInclude Include="src\engine\graphics\buffers\GLBuffer.h" />
     <ClInclude Include="src\engine\graphics\buffers\IndexBuffer.h" />
     <ClInclude Include="src\engine\graphics\buffers\VertexArrayObject.h" />
     <ClInclude Include="src\engine\graphics\buffers\VertexBuffer.h" />
     <ClInclude Include="src\engine\graphics\camera\Camera.h" />
-    <ClInclude Include="src\engine\graphics\Shader.h" />
-    <ClInclude Include="src\engine\graphics\Texture2D.h" />
+    <ClInclude Include="src\engine\import manager\material\Material.h" />
+    <ClInclude Include="src\engine\import manager\model\Mesh.h" />
+    <ClInclude Include="src\engine\import manager\model\Model.h" />
+    <ClInclude Include="src\engine\import manager\shader\Shader.h" />
+    <ClInclude Include="src\engine\import manager\texture2D\Texture2D.h" />
     <ClInclude Include="src\engine\objects\PObject.h" />
     <ClInclude Include="src\engine\objects\Component.h" />
     <ClInclude Include="src\engine\objects\Object.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\resources\shaders\basic\basic.frag" />
+    <None Include="src\resources\shaders\basic\basic.shad" />
     <None Include="src\resources\shaders\basic\basic.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,7 +1,9 @@
 #include "GLBuffer.h"
 
-#ifndef INDEXBUFFER
-#define INDEXBUFFER
+#ifndef INDEXBUFFERCLASS
+#define INDEXBUFFERCLASS
+
+// OpenGL Index Buffer abstraction
 
 class IndexBuffer : public GLBuffer {
 public:

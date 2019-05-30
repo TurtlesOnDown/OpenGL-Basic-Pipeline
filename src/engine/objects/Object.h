@@ -1,7 +1,7 @@
 #include "../common/Includes.h"
 
-#ifndef OBJECT
-#define OBJECT
+#ifndef OBJECTCLASS
+#define OBJECTCLASS
 
 class Object {
 public:

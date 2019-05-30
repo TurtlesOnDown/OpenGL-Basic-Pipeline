@@ -1,7 +1,9 @@
 #include "GLBuffer.h"
 
-#ifndef VERTEXBUFFER
-#define VERTEXBUFFER
+#ifndef VERTEXBUFFERCLASS
+#define VERTEXBUFFERCLASS
+
+// OpenGL Vertex Buffer abstraction
 
 class VertexBuffer : public GLBuffer {
 public:

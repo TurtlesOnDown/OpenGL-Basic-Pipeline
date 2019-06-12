@@ -1,0 +1,29 @@
+#pragma once
+
+#include "Includes.h"
+
+#include "../../import manager/shader/Shader.h"
+#include "../lights/DirectionalLight.h"
+#include "../camera/Camera.h"
+
+class Renderer {
+public:
+	Renderer(std::shared_ptr<Camera> cam = nullptr, std::shared_ptr<Shader> shader = nullptr);
+	~Renderer();
+
+	void submitObject(std::shared_ptr<PObject> obj);
+	void submitDirectionalLight(std::shared_ptr<DirectionalLight> dirLight);
+	void draw();
+
+	void setDefaultShader(std::shared_ptr<Shader> shader);
+	void setActiveCamera(std::shared_ptr<Camera> cam);
+	void setProjectionMatrix(float FOV, float aspectRatio, float nearPlane, float farPlane);
+private:
+	std::vector<std::shared_ptr<PObject>> objects;
+	std::vector <std::shared_ptr<DirectionalLight>> directionalLights;
+
+	std::shared_ptr<Camera> activeCam;
+	std::shared_ptr<Shader> defaultShader;
+	glm::mat4 projectionMatrix;
+
+};

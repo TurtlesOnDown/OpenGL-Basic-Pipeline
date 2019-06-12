@@ -1,3 +1,5 @@
+#include "Includes.h"
+
 #include "Object.h"
 
 #ifndef COMPONENTCLASS

@@ -1,3 +1,5 @@
+#include "Includes.h"
+
 #include "VertexArrayObject.h"
 
 VertexArrayObject::VertexArrayObject() {

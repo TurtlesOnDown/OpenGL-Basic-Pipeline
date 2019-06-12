@@ -1,3 +1,5 @@
+#include "Includes.h"
+
 #include "Model.h"
 #include "../ImportManager.h"
 
@@ -144,6 +146,13 @@ std::shared_ptr<Mesh> ModelImporter::processMesh(std::shared_ptr<Model> m, aiMes
 Material ModelImporter::processMaterial(std::shared_ptr<Model> m, aiMaterial* mat) {
 	Material newMaterial;
 
+	std::string matName = mat->GetName().C_Str();
+
+	float shininess = 0.0f;
+	if (AI_SUCCESS == mat->Get(AI_MATKEY_SHININESS, shininess)) {
+		newMaterial.addFloat("shininess", shininess);
+	}
+	
 	proccessTextures(m, newMaterial, mat, aiTextureType_DIFFUSE, "texture_diffuse");
 	proccessTextures(m, newMaterial, mat, aiTextureType_SPECULAR, "texture_specular");
 	proccessTextures(m, newMaterial, mat, aiTextureType_HEIGHT, "texture_normal");

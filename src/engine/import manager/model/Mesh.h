@@ -1,3 +1,5 @@
+#include "Includes.h"
+
 #include "../../objects/Component.h"
 #include "../../graphics/buffers/BufferLayout.h"
 #include "../../graphics/buffers/VertexBuffer.h"

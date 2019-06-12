@@ -1,3 +1,5 @@
+#include "Includes.h"
+
 #include "VertexBuffer.h"
 
 VertexBuffer::VertexBuffer() {

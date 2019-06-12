@@ -1,3 +1,5 @@
+#include "Includes.h"
+
 #include "Material.h"
 
 Material::Material():Component(COMPONENT_TYPE::MATERIAL) {
@@ -17,6 +19,10 @@ void Material::addTexture2D(std::string name, const std::shared_ptr<Texture2D> t
 	textures2D[name] = t;
 }
 
+void Material::addFloat(std::string name, float value) {
+	floatValues[name] = value;
+}
+
 void Material::useMaterial(const std::shared_ptr<Shader> shader) {
 	shader->use();
 
@@ -27,6 +33,10 @@ void Material::useMaterial(const std::shared_ptr<Shader> shader) {
 		count++;
 
 		texture.second->bind();
+	}
+
+	for (auto x : floatValues) {
+		shader->setFloat(x.first, x.second);
 	}
 	
 }

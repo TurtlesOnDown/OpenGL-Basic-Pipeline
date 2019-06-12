@@ -1,3 +1,5 @@
+#include "Includes.h"
+
 #include "BufferLayout.h"
 
 BufferLayout::BufferLayout(): stride(0) {

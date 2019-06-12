@@ -1,3 +1,5 @@
+#include "Includes.h"
+
 #include "../../objects/Component.h"
 
 #include "../shader/Shader.h"
@@ -15,11 +17,13 @@ public:
 	Material operator=(const Material& m);
 
 	void addTexture2D(std::string name, const std::shared_ptr<Texture2D> t);
+	void addFloat(std::string name, float value);
 
 	void useMaterial(const std::shared_ptr<Shader> s);
 
 private:
 	std::map<std::string, std::shared_ptr<Texture2D>> textures2D;
+	std::map<std::string, float> floatValues;
 };
 
 #endif // !MATERIALCLASS

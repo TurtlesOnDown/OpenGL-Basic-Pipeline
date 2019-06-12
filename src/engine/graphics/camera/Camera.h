@@ -1,3 +1,5 @@
+#include "Includes.h"
+
 #include "../../objects/PObject.h"
 
 #ifndef CAMERACLASS

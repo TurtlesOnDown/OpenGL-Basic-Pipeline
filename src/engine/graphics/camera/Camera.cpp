@@ -1,3 +1,5 @@
+#include "Includes.h"
+
 #include "Camera.h"
 
 Camera::Camera(glm::vec3 pos):PObject(pos) {

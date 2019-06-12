@@ -1,3 +1,5 @@
+#include "Includes.h"
+
 #include "Texture2D.h"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -63,7 +65,6 @@ void Texture2DImporter::importTexture(std::shared_ptr<Texture2D> texture) {
 
 	texture->bind();
 
-	stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
 	uint8_t* data = stbi_load(texture->path.getPath().c_str(), &texture->width, &texture->height, &texture->nrChannels, 0);
 	if (data)
 	{

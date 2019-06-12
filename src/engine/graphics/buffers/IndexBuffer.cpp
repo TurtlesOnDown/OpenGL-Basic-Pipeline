@@ -1,3 +1,5 @@
+#include "Includes.h"
+
 #include "IndexBuffer.h"
 
 IndexBuffer::IndexBuffer() {

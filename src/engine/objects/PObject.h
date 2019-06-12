@@ -1,3 +1,5 @@
+#include "Includes.h"
+
 #include "Object.h"
 #include <glm/gtc/quaternion.hpp>
 
@@ -20,6 +22,8 @@ public:
 
 	void translate(glm::vec3 trans);
 	void rotate(float angle, glm::vec3 axis, SPACE relativeTo); // Angle in radians, axis to rotate around, and relative space
+	
+	inline void setPosition(glm::vec3 pos) { position = pos; }
 
 	inline const glm::vec3 &getPosition() const { return position; }
 
@@ -29,7 +33,7 @@ public:
 
 	inline void addComponent(COMPONENT_TYPE type, std::shared_ptr<Component> comp) { components[type] = comp; }
 
-	friend void draw(PObject& m, Camera &cam, glm::mat4& proj, const std::shared_ptr<Shader> shader);
+	void draw(const std::shared_ptr<Shader> shader);
 protected:
 	glm::vec3 position;
 	glm::quat orientation;
@@ -44,8 +48,6 @@ protected:
 
 	virtual void updateVectors();
 };
-
-void draw(PObject& m, Camera& cam, glm::mat4& proj, const std::shared_ptr<Shader> shader); // easily replacable draw function
 
 #endif // !POBJECTCLASS
 

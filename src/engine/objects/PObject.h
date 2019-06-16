@@ -37,12 +37,10 @@ public:
 protected:
 	glm::vec3 position;
 	glm::quat orientation;
-	glm::vec3 front = { 0.0f, 0.0f, 1.0f };
+	glm::vec3 front;
 	glm::vec3 right;
 	glm::vec3 up;
 	static glm::vec3 worldUp; // this might not live here by the end, probably better to have it in a render class
-
-	bool updated = false;
 
 	std::map<COMPONENT_TYPE, std::shared_ptr<Component>> components;
 

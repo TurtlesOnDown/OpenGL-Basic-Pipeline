@@ -10,7 +10,7 @@
 
 class Shader : public Component {
 public:
-	Shader(Path& shaderfile);
+	Shader(Path shaderfile);
 	~Shader();
 
 	// Make sure glad has been initialized before loading any shaders.

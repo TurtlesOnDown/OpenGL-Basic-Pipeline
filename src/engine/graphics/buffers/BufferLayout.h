@@ -21,7 +21,7 @@ public:
 	template<typename T>
 	void Push(unsigned int count = 1, bool normalized = false)
 	{
-		std::cout << "BUFFERLAYOUT::INCORRECT TYPE" << std::endl;
+		LOG_WARN("BUFFERLAYOUT::INCORRECT TYPE");
 	}
 
 	template<>

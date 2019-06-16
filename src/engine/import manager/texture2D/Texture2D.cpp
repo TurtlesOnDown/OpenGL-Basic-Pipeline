@@ -7,7 +7,7 @@
 
 #include "../../import manager/ImportManager.h"
 
-Texture2D::Texture2D(Path& p):Component(COMPONENT_TYPE::TEXTURE2D), path(p) {
+Texture2D::Texture2D(Path p):Component(COMPONENT_TYPE::TEXTURE2D), path(p) {
 	glGenTextures(1, &texture);
 }
 
@@ -83,7 +83,7 @@ void Texture2DImporter::importTexture(std::shared_ptr<Texture2D> texture) {
 	}
 	else
 	{
-		std::cout << "TEXTURE::UNABLE TO LOAD TEXTURE" << std::endl;
+		LOG_WARN("TEXTURE::UNABLE TO LOAD TEXTURE");
 	}
 	stbi_image_free(data);
 

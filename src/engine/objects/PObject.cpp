@@ -19,7 +19,6 @@ PObject::~PObject() {
 
 void PObject::translate(glm::vec3 trans) {
 	position += trans;
-	updated = true;
 }
 
 void PObject::rotate(float angle, glm::vec3 axis, SPACE relativeTo) {
@@ -34,42 +33,30 @@ void PObject::rotate(float angle, glm::vec3 axis, SPACE relativeTo) {
 		orientation = key_quat * orientation;
 		break;
 	default:
-		std::cout << "POBJECT::INVALID SPACE" << std::endl;
+		LOG_WARN("POBJECT::INVALID SPACE");
 		break;
 	}
 
 	orientation = glm::normalize(orientation);
 
-	updated = true;
+	updateVectors();
 }
 
 const glm::vec3& PObject::getFront() {
-	if (updated) {
-		updateVectors();
-		updated = false;
-	}
 	return front;
 }
 
 const glm::vec3& PObject::getRight() {
-	if (updated) {
-		updateVectors();
-		updated = false;
-	}
 	return right;
 }
 
 const glm::vec3& PObject::getUp() {
-	if (updated) {
-		updateVectors();
-		updated = false;
-	}
 	return up;
 }
 
 void PObject::updateVectors() {
-	front = glm::vec3(0.0f, 0.0f, 1.0f) * orientation;
-	right = glm::vec3(-1.0f, 0.0f, 0.0f) * orientation;
+	front = glm::vec3(0.0f, 0.0f, -1.0f) * orientation;
+	right = glm::vec3(1.0f, 0.0f, 0.0f) * orientation;
 	up = glm::vec3(0.0f, 1.0f, 0.0f) * orientation;
 }
 
@@ -80,7 +67,7 @@ void PObject::draw(const std::shared_ptr<Shader> shader) {
 		modelMesh = std::dynamic_pointer_cast<Model>(components[COMPONENT_TYPE::MODEL]);
 	}
 	else {
-		std::cout << "DRAW::UNABLE TO FIND MODEL" << std::endl;
+		LOG_INFO("DRAW::UNABLE TO FIND MODEL");
 		return;
 	}
 

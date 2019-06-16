@@ -12,23 +12,25 @@ public:
 	~ImportManager();
 
 	template<typename T>
-	std::shared_ptr<T> load(Path file) {
-		std::cout << "IMPORTMANAGER::INCORRECT TYPE" << std::endl;
+	std::shared_ptr<T> load(std::string path) {
+		LOG_WARN("IMPORTMANAGER::INCORRECT TYPE");
 	}
 
 	template<>
-	std::shared_ptr<Texture2D> load(Path file) {
+	std::shared_ptr<Texture2D> load(std::string path) {
+		Path file(path);
 		return textures2D.load(file);
 	}
 
 	template<>
-	std::shared_ptr<Shader> load(Path file) {
-		
+	std::shared_ptr<Shader> load(std::string path) {
+		Path file(path);
 		return shaders.load(file);
 	}
 
 	template<>
-	std::shared_ptr<Model> load(Path file) {
+	std::shared_ptr<Model> load(std::string path) {
+		Path file(path);
 		return models.load(file);
 	}
 

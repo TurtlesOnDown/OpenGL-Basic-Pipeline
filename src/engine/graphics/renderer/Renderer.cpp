@@ -22,6 +22,14 @@ void Renderer::submitDirectionalLight(std::shared_ptr<DirectionalLight> dirLight
 	directionalLights.push_back(dirLight);
 }
 
+void Renderer::submitPointLight(std::shared_ptr<PointLight> pointlight) {
+	pointLights.push_back(pointlight);
+}
+
+void Renderer::submitSpotLight(std::shared_ptr<SpotLight> spotLight) {
+	spotLights.push_back(spotLight);
+}
+
 void Renderer::draw() {
 	defaultShader->use();
 	defaultShader->setMat4("view", activeCam->getViewMatrix());
@@ -31,6 +39,18 @@ void Renderer::draw() {
 	int count = 0;
 	for (auto dirLight : directionalLights) {
 		dirLight->use(defaultShader, count);
+		count++;
+	}
+
+	count = 0;
+	for (auto pointLight : pointLights) {
+		pointLight->use(defaultShader, count);
+		count++;
+	}
+
+	count = 0;
+	for (auto spotLight : spotLights) {
+		spotLight->use(defaultShader, count);
 		count++;
 	}
 

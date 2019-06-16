@@ -12,7 +12,7 @@
 
 class Model : public Component {
 public:
-	Model(Path& file);
+	Model(Path file);
 	Model(const Model& m);
 	~Model();
 

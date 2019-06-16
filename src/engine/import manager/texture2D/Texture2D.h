@@ -17,7 +17,7 @@ bind();
 
 class Texture2D : public Component {
 public:
-	Texture2D(Path& p);
+	Texture2D(Path p);
 	~Texture2D();
 
 	void bind();

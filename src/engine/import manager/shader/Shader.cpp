@@ -5,7 +5,7 @@
 #include <fstream>
 #include <sstream>
 
-Shader::Shader(Path& shaderfile) :Component(COMPONENT_TYPE::SHADER),path(shaderfile) {
+Shader::Shader(Path shaderfile) :Component(COMPONENT_TYPE::SHADER),path(shaderfile) {
 	
 }
 
@@ -75,7 +75,7 @@ void ShaderImporter::importShader(std::shared_ptr<Shader> shader) {
 	}
 	catch (std::ifstream::failure e)
 	{
-		std::cout << "SHADER::UNABLE TO LOAD SHAD FILE" << std::endl;
+		LOG_WARN("SHADER::UNABLE TO LOAD SHAD FILE");
 		return;
 	}
 
@@ -110,7 +110,7 @@ void ShaderImporter::compileShader(std::shared_ptr<Shader> shader, std::string v
 	}
 	catch (std::ifstream::failure e)
 	{
-		std::cout << "SHADER::UNABLE TO READ VSHADER/FSHADER" << std::endl;
+		LOG_WARN("SHADER::UNABLE TO READ VSHADER/FSHADER");
 	}
 
 	const char* vShaderCode = vertexCode.c_str();
@@ -149,7 +149,7 @@ void ShaderImporter::checkCompileErrors(unsigned int shader, std::string type) {
 		if (!success)
 		{
 			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "SHADER::COMPILE ERROR::" << type << "::" << infoLog << std::endl;
+			LOG_ERROR("SHADER::COMPILE ERROR::{0}::{1}", type, infoLog);
 		}
 	}
 	else
@@ -158,7 +158,7 @@ void ShaderImporter::checkCompileErrors(unsigned int shader, std::string type) {
 		if (!success)
 		{
 			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "SHADER::LINKING ERROR::" << type << "::" << infoLog << std::endl;
+			LOG_ERROR("SHADER::LINKING ERROR::{0}::{1}", type, infoLog);
 		}
 	}
 }

@@ -18,3 +18,5 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <cstdint>
+
+#include "../common/Log.h"

@@ -4,10 +4,12 @@
 
 #include <spdlog/sinks/stdout_color_sinks.h>
 
+bool Log::initialized =  false;
 std::shared_ptr<spdlog::logger> Log::logger;
 
 void Log::init() {
 	spdlog::set_pattern("%^[%T %d-%m-%Y] [%@] %v%$");
 	logger = spdlog::stdout_color_mt("console");
 	logger->set_level(spdlog::level::trace);
+	initialized = true;
 }

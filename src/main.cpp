@@ -24,8 +24,8 @@ void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1200;
+const unsigned int SCR_HEIGHT = 1000;
 
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
@@ -35,19 +35,13 @@ glm::vec2 mousePosition(SCR_WIDTH / 2.0f, SCR_HEIGHT / 2.0f);
 
 bool firstMouse = true;
 
-std::shared_ptr<Camera> camera(new Camera({ 0.0f, 0.0f, -3.0f }));
+std::shared_ptr<Camera> camera(new Camera({ 0.0f, 0.0f, 3.0f }));
 
-#include "engine/common/Log.h"
+std::shared_ptr<SpotLight> flashLight(new SpotLight({ 1.0f, 1.0f, 1.0f }, { 0.0f, 7.0f, -1.0f }));
 
 int main()
 {
 	Log::init();
-
-	LOG_ERROR("Hello world.");
-	LOG_TRACE("Hello world.");
-	LOG_INFO("Hello world.");
-	LOG_WARN("Hello world.");
-	LOG_CRITICAL("Hello world.");
 
 	// glfw: initialize and configure
 	// ------------------------------
@@ -65,7 +59,7 @@ int main()
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
 	if (window == NULL)
 	{
-		std::cout << "Failed to create GLFW window" << std::endl;
+		LOG_ERROR("Failed to create GLFW window");
 		glfwTerminate();
 		return -1;
 	}
@@ -79,7 +73,7 @@ int main()
 	// ---------------------------------------
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
+		LOG_ERROR("Failed to initialize GLAD");
 		return -1;
 	}
 
@@ -87,44 +81,50 @@ int main()
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
 
-	Path shaderfile("src\\resources\\shaders\\basic\\basic.shad");
 
-	Path modelPath("src\\resources\\models\\nanosuit\\nanosuit.obj");
-	Path containerPath("src\\resources\\models\\testCube\\test.obj");
 	//Path untiltedPath("src\\resources\\models\\untitled\\untitled.obj");
-	std::shared_ptr<Model> testModel = resourceManager.load<Model>(modelPath);
-	std::shared_ptr<Model> testCube = resourceManager.load<Model>(containerPath);
-	//std::shared_ptr<Model> testUntitled = resourceManager.load<Model>(untiltedPath);
+	std::shared_ptr<Model> testModel = resourceManager.load<Model>("src\\resources\\models\\nanosuit\\nanosuit.obj");
+	//std::shared_ptr<Model> testCube = resourceManager.load<Model>("src\\resources\\models\\testCube\\test.obj");
+	//std::shared_ptr<Model> testUntitled = resourceManager.load<Model>("src\\resources\\models\\untitled\\untitled.obj");
 
 	//std::shared_ptr<Model> testModel2 = resourceManager.load<Model>(modelPath);
 
-	std::shared_ptr<Shader> ourShader = resourceManager.load<Shader>(shaderfile);
+	std::shared_ptr<Shader> ourShader = resourceManager.load<Shader>("src\\resources\\shaders\\basic\\basic.shad");
 
-	Path container("src\\resources\\textures\\container.jpg");
-	std::shared_ptr<Texture2D> texture = resourceManager.load<Texture2D>(container);
+	std::shared_ptr<Texture2D> texture = resourceManager.load<Texture2D>("src\\resources\\textures\\container.jpg");
 
 	std::shared_ptr<Material> testMaterial(new Material());
 	testMaterial->addTexture2D("texture_diffuse0",texture);
 
-	testCube->setMaterial(0, *testMaterial);
+	//testCube->setMaterial(0, *testMaterial);
 
 	std::shared_ptr<PObject> testObject(new PObject());
 	testObject->addComponent(COMPONENT_TYPE::MATERIAL, testMaterial);
-	testObject->addComponent(COMPONENT_TYPE::MODEL, testCube);
+	//testObject->addComponent(COMPONENT_TYPE::MODEL, testCube);
 
 	std::shared_ptr<PObject> testObject3(new PObject({3, 0, 0}));
 	testObject3->addComponent(COMPONENT_TYPE::MATERIAL, testMaterial);
-	testObject3->addComponent(COMPONENT_TYPE::MODEL, testCube);
+	//testObject3->addComponent(COMPONENT_TYPE::MODEL, testCube);
 
 	std::shared_ptr<PObject> testObject4(new PObject({0, 3, 0}));
 	testObject4->addComponent(COMPONENT_TYPE::MATERIAL, testMaterial);
-	testObject4->addComponent(COMPONENT_TYPE::MODEL, testCube);
+	//testObject4->addComponent(COMPONENT_TYPE::MODEL, testCube);
 
 	std::shared_ptr<PObject> testObject2(new PObject({ 0, 0, 0 }));
 	testObject2->addComponent(COMPONENT_TYPE::MATERIAL, testMaterial);
 	testObject2->addComponent(COMPONENT_TYPE::MODEL, testModel);
 
-	std::shared_ptr<DirectionalLight> sunLight(new DirectionalLight({ 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 1.0f }));
+	std::shared_ptr<PObject> copyModel1(new PObject({ 0, 0, 3.0f }));
+	copyModel1->addComponent(COMPONENT_TYPE::MATERIAL, testMaterial);
+	copyModel1->addComponent(COMPONENT_TYPE::MODEL, testModel);
+
+	std::shared_ptr<PObject> copyModel2(new PObject({ 0, 0, -3.0f }));
+	copyModel2->addComponent(COMPONENT_TYPE::MATERIAL, testMaterial);
+	copyModel2->addComponent(COMPONENT_TYPE::MODEL, testModel);
+
+	std::shared_ptr<DirectionalLight> sunLight(new DirectionalLight({ 1.0f, 1.0f, 1.0f }, { 0.0f, 5.0f, 1.0f }));
+	std::shared_ptr<PointLight> cameraLight(new PointLight({ 1.0f, 1.0f, 1.0f }, { 0.0f, 7.0f, -3.0f }));
+	
 
 	openGLRenderer.setActiveCamera(camera);
 	openGLRenderer.setDefaultShader(ourShader);
@@ -132,7 +132,11 @@ int main()
 	openGLRenderer.submitObject(testObject2);
 	//openGLRenderer.submitObject(testObject3);
 	//openGLRenderer.submitObject(testObject4);
-	openGLRenderer.submitDirectionalLight(sunLight);
+	openGLRenderer.submitObject(copyModel2);
+	openGLRenderer.submitObject(copyModel1);
+	//penGLRenderer.submitDirectionalLight(sunLight);
+	//openGLRenderer.submitPointLight(cameraLight);
+	openGLRenderer.submitSpotLight(flashLight);
 	//openGLRenderer.submitObject(testObject2);
 	// create transformations
 	//glm::mat4 projection = glm::mat4(1.0f);
@@ -151,13 +155,16 @@ int main()
 		// input
 		// -----
 		processInput(window);
-		sunLight->translate({ cos(currentFrame) * 0.01f, 0.0f, 0.0f});
+		//sunLight->translate({ cos(currentFrame) * 0.05f, 0.0f, 0.0f});
+		//cameraLight->setPosition(camera->getPosition());
+		flashLight->setPosition(camera->getPosition());
+
 		// render
 		// ------
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		testObject->rotate(sin(currentFrame) * 0.02f, { 1, 1, 0 }, SPACE::LOCAL);
+		//testObject->rotate(sin(currentFrame) * 0.02f, { 1, 1, 0 }, SPACE::LOCAL);
 
 		// render container
 		openGLRenderer.draw();
@@ -182,8 +189,6 @@ void processInput(GLFWwindow* window)
 		glfwSetWindowShouldClose(window, true);
 
 	float velocity = 10.0f * deltaTime;
-
-	
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		camera->translate(camera->getFront() * velocity);
@@ -223,5 +228,8 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	mousePosition = { xpos, ypos };
 	camera->rotate(mouseX_Sensitivity * mouse_delta.x, { 0, 1, 0 }, SPACE::WORLD);
 	camera->rotate(mouseX_Sensitivity * mouse_delta.y, {1, 0, 0}, SPACE::LOCAL);
+
+	flashLight->rotate(mouseX_Sensitivity * mouse_delta.x, { 0, 1, 0 }, SPACE::WORLD);
+	flashLight->rotate(mouseX_Sensitivity * mouse_delta.y, { 1, 0, 0 }, SPACE::LOCAL);
 	
 }

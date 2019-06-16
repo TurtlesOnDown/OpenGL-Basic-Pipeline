@@ -3,7 +3,7 @@
 #include "Model.h"
 #include "../ImportManager.h"
 
-Model::Model(Path& file):Component(COMPONENT_TYPE::MODEL), path(file) {
+Model::Model(Path file):Component(COMPONENT_TYPE::MODEL), path(file) {
 
 }
 
@@ -44,7 +44,7 @@ std::shared_ptr<Model> ModelImporter::loadModel(Path& p) {
 	// check for errors
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 	{
-		std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
+		LOG_WARN("ERROR::ASSIMP::{0}", importer.GetErrorString());
 		return std::shared_ptr<Model>(nullptr);
 	}
 
@@ -166,8 +166,7 @@ void ModelImporter::proccessTextures(std::shared_ptr<Model> m, Material& mat, ai
 		aiString str;
 		aiMat->GetTexture(type, i, &str);
 
-		Path texturePath(m->path.getDirectory() + str.C_Str());
-		std::shared_ptr<Texture2D> texture = manager->load<Texture2D>(texturePath);
+		std::shared_ptr<Texture2D> texture = manager->load<Texture2D>(m->path.getDirectory() + str.C_Str());
 		texture->bind();
 		texture->setWrappingParam(GL_REPEAT, GL_REPEAT);
 		texture->setFilteringParam(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);

@@ -52,6 +52,30 @@ private:
 	void proccessTextures(std::shared_ptr<Model> m, Material& mat, aiMaterial* aiMat, aiTextureType type, std::string typeName);
 
 	std::shared_ptr<Model> copyModel(std::shared_ptr<Model> m);
+
+	template<typename T>
+	void getMaterialProperty(Material &newMaterial, aiMaterial *mat, const char *pKey, unsigned int type, unsigned int idx, std::string matProperty, T defaultValue) {
+		T value;
+		if (AI_SUCCESS == mat->Get(pKey, type, idx, value)) {
+			newMaterial.add<T>(matProperty, value);
+		}
+		else {
+			newMaterial.add<T>(matProperty, defaultValue);
+		}
+	}
+
+	template<>
+	void getMaterialProperty<glm::vec3>(Material &newMaterial, aiMaterial *mat, const char *pKey, unsigned int type, unsigned int idx, std::string matProperty, glm::vec3 defaultValue) {
+		aiColor3D color;
+		glm::vec3 value;
+		if (AI_SUCCESS == mat->Get(pKey, type, idx, color)) {
+			value = { color.r, color.g, color.b };
+			newMaterial.add<glm::vec3>(matProperty, value);
+		}
+		else {
+			newMaterial.add<glm::vec3>(matProperty, defaultValue);
+		}
+	}
 };
 
 #endif

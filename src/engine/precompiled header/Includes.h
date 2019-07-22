@@ -20,3 +20,4 @@
 #include <cstdint>
 
 #include "../common/Log.h"
+#include "../graphics/error/GLError.h"

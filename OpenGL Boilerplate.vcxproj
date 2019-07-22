@@ -143,6 +143,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\engine\common\Log.cpp" />
+    <ClCompile Include="src\engine\graphics\error\Glerror.cpp" />
     <ClCompile Include="src\engine\graphics\lights\DirectionalLight.cpp" />
     <ClCompile Include="src\engine\graphics\lights\Light.cpp" />
     <ClCompile Include="src\engine\graphics\lights\PointLight.cpp" />
@@ -175,6 +176,7 @@
   <ItemGroup>
     <ClInclude Include="Dependancies\Includes\stb_image\stb_image.h" />
     <ClInclude Include="src\engine\common\Log.h" />
+    <ClInclude Include="src\engine\graphics\error\Glerror.h" />
     <ClInclude Include="src\engine\graphics\lights\DirectionalLight.h" />
     <ClInclude Include="src\engine\graphics\lights\Light.h" />
     <ClInclude Include="src\engine\graphics\lights\PointLight.h" />

@@ -6,37 +6,34 @@ Material::Material():Component(COMPONENT_TYPE::MATERIAL) {
 
 }
 
+Material::Material(std::string name):Component(COMPONENT_TYPE::MATERIAL), matName(name) {
+
+}
+
 Material::~Material() {
 
 }
 
 Material Material::operator=(const Material& m) {
+	matName = m.matName;
 	textures2D = m.textures2D; 
+	vec3Values = m.vec3Values;
+	boolValues = m.boolValues;
+	intValues = m.intValues;
+	floatValues = m.floatValues;
+	mat4Values = m.mat4Values;
 	return *this;
-}
-
-void Material::addTexture2D(std::string name, const std::shared_ptr<Texture2D> t) {
-	textures2D[name] = t;
-}
-
-void Material::addFloat(std::string name, float value) {
-	floatValues[name] = value;
 }
 
 void Material::useMaterial(const std::shared_ptr<Shader> shader) {
 	shader->use();
 
-	int count = 0;
-	for (auto texture : textures2D) {
-		texture.second->activateTexture(count);
-		shader->setInt(texture.first, count);
-		count++;
+	setValues<std::shared_ptr<Texture2D>>(shader, textures2D);
+	setValues<bool>(shader, boolValues);
+	setValues<int>(shader, intValues);
+	setValues<float>(shader, floatValues);
+	setValues<glm::vec3>(shader, vec3Values);
+	setValues<glm::mat4>(shader, mat4Values);
 
-		texture.second->bind();
-	}
-
-	for (auto x : floatValues) {
-		shader->setFloat(x.first, x.second);
-	}
-	
+	GLGET_ERROR();
 }

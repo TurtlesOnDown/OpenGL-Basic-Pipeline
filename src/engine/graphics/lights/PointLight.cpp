@@ -15,15 +15,15 @@ PointLight::~PointLight() {
 void PointLight::use(std::shared_ptr<Shader> shader, int num) {
 	std::string number = std::to_string(num);
 
-	shader->setVec3("pointLights[" + number + "].position", position);
+	shader->set<glm::vec3>("pointLights[" + number + "].position", getWorldPosition());
 
-	shader->setFloat("pointLights[" + number + "].constant", constantAttenuation);
-	shader->setFloat("pointLights[" + number + "].linear", linearAttenuation);
-	shader->setFloat("pointLights[" + number + "].quadratic", quadraticAttenuation);
+	shader->set<float>("pointLights[" + number + "].constant", constantAttenuation);
+	shader->set<float>("pointLights[" + number + "].linear", linearAttenuation);
+	shader->set<float>("pointLights[" + number + "].quadratic", quadraticAttenuation);
 
-	shader->setVec3("pointLights[" + number + "].ambient", ambient);
-	shader->setVec3("pointLights[" + number + "].diffuse", diffuse);
-	shader->setVec3("pointLights[" + number + "].specular", specular);
+	shader->set<glm::vec3>("pointLights[" + number + "].ambient", ambient);
+	shader->set<glm::vec3>("pointLights[" + number + "].diffuse", diffuse);
+	shader->set<glm::vec3>("pointLights[" + number + "].specular", specular);
 }
 
 void PointLight::setAttenuation(float linear, float constant, float quad) {

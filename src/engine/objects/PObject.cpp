@@ -7,10 +7,8 @@
 #include "../import manager/model/Model.h"
 #include "../graphics/camera/Camera.h"
 
-glm::vec3 PObject::worldUp = { 0.0f, 1.0f, 0.0f };
+PObject::PObject(glm::vec3 pos, glm::vec3 s):localPosition(pos), localScale(s) {
 
-PObject::PObject(glm::vec3 pos):position(pos) {
-	updateVectors();
 }
 
 PObject::~PObject() {
@@ -18,7 +16,15 @@ PObject::~PObject() {
 }
 
 void PObject::translate(glm::vec3 trans) {
-	position += trans;
+	localPosition += trans;
+}
+
+void PObject::scaleAdd(glm::vec3 s) {
+	localScale += s;
+}
+
+void PObject::scaleMult(glm::vec3 s) {
+	localScale *= s;
 }
 
 void PObject::rotate(float angle, glm::vec3 axis, SPACE relativeTo) {
@@ -27,37 +33,66 @@ void PObject::rotate(float angle, glm::vec3 axis, SPACE relativeTo) {
 	switch (relativeTo)
 	{
 	case SPACE::WORLD:
-		orientation = orientation * key_quat;
+		localOrientation = localOrientation * key_quat;
 		break;
 	case SPACE::LOCAL:
-		orientation = key_quat * orientation;
+		localOrientation = key_quat * localOrientation;
 		break;
 	default:
 		LOG_WARN("POBJECT::INVALID SPACE");
 		break;
 	}
 
-	orientation = glm::normalize(orientation);
-
-	updateVectors();
+	localOrientation = glm::normalize(localOrientation);
 }
 
-const glm::vec3& PObject::getFront() {
-	return front;
+glm::mat4 PObject::getModelMatrix() {
+	glm::mat4 parentModel = glm::mat4(1.0f);
+	if (getParent() != nullptr) {
+		parentModel = getParent()->getModelMatrix();
+	}
+
+	glm::mat4 localModel = glm::translate(glm::mat4(1.0f), localPosition);
+	localModel *= glm::mat4_cast(localOrientation);
+	localModel *= glm::scale(glm::mat4(1.0f), localScale);
+	return parentModel * localModel;
 }
 
-const glm::vec3& PObject::getRight() {
-	return right;
+glm::vec3 PObject::getWorldFront() const {
+	return glm::vec3(0.0f, 0.0f, -1.0f) * getWorldOrienation();
 }
 
-const glm::vec3& PObject::getUp() {
-	return up;
+glm::vec3 PObject::getWorldRight() const {
+	return glm::vec3(1.0f, 0.0f, 0.0f) * getWorldOrienation();
 }
 
-void PObject::updateVectors() {
-	front = glm::vec3(0.0f, 0.0f, -1.0f) * orientation;
-	right = glm::vec3(1.0f, 0.0f, 0.0f) * orientation;
-	up = glm::vec3(0.0f, 1.0f, 0.0f) * orientation;
+glm::vec3 PObject::getWorldUp() const {
+	return glm::vec3(0.0f, 1.0f, 0.0f) * getWorldOrienation();
+}
+
+glm::vec3 PObject::getWorldPosition() const {
+	auto worldPos = localPosition;
+
+	if (getParent() != nullptr) {
+		worldPos = glm::vec3(getParent()->getModelMatrix() * glm::vec4(localPosition, 1.0f));
+	}
+
+	return worldPos;
+}
+
+glm::quat PObject::getWorldOrienation() const {
+	auto parentPtr = getParent();
+	auto worldOrient = localOrientation;
+	while (parentPtr != nullptr) {
+		worldOrient = parentPtr->localOrientation * worldOrient;
+		parentPtr = parentPtr->getParent();
+	}
+	return worldOrient;
+}
+
+void PObject::addChild(std::shared_ptr<PObject> parent, std::shared_ptr<PObject> child) {
+	parent->children.push_back(child);
+	child->parent = parent;
 }
 
 void PObject::draw(const std::shared_ptr<Shader> shader) {
@@ -74,13 +109,10 @@ void PObject::draw(const std::shared_ptr<Shader> shader) {
 	auto meshes = modelMesh->getMeshes();
 	auto materials = modelMesh->getMaterials();
 
-	glm::mat4 model = glm::mat4_cast(orientation);
-	model = glm::translate(model, position);
-
 	for (auto mats : materials) {
 
 		mats.second.useMaterial(shader);
-		shader->setMat4("model", model);
+		shader->set<glm::mat4>("model", getModelMatrix());
 
 		meshes[mats.first]->bindVAO();
 		meshes[mats.first]->draw();

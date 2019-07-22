@@ -14,19 +14,19 @@ SpotLight::~SpotLight() {
 void SpotLight::use(std::shared_ptr<Shader> shader, int num) {
 	std::string number = std::to_string(num);
 
-	shader->setVec3("spotLights[" + number + "].position", position);
-	shader->setVec3("spotLights[" + number + "].direction", getFront());
+	shader->set<glm::vec3>("spotLights[" + number + "].position", getWorldPosition());
+	shader->set<glm::vec3>("spotLights[" + number + "].direction", getWorldFront());
 
-	shader->setFloat("spotLights[" + number + "].constant", constantAttenuation);
-	shader->setFloat("spotLights[" + number + "].linear", linearAttenuation);
-	shader->setFloat("spotLights[" + number + "].quadratic", quadraticAttenuation);
+	shader->set<float>("spotLights[" + number + "].constant", constantAttenuation);
+	shader->set<float>("spotLights[" + number + "].linear", linearAttenuation);
+	shader->set<float>("spotLights[" + number + "].quadratic", quadraticAttenuation);
 
-	shader->setFloat("spotLights[" + number + "].cutOff", cutOff);
-	shader->setFloat("spotLights[" + number + "].outerCutOff", outerCutOff);
+	shader->set<float>("spotLights[" + number + "].cutOff", cutOff);
+	shader->set<float>("spotLights[" + number + "].outerCutOff", outerCutOff);
 
-	shader->setVec3("spotLights[" + number + "].ambient", ambient);
-	shader->setVec3("spotLights[" + number + "].diffuse", diffuse);
-	shader->setVec3("spotLights[" + number + "].specular", specular);
+	shader->set<glm::vec3>("spotLights[" + number + "].ambient", ambient);
+	shader->set<glm::vec3>("spotLights[" + number + "].diffuse", diffuse);
+	shader->set<glm::vec3>("spotLights[" + number + "].specular", specular);
 
 	
 }

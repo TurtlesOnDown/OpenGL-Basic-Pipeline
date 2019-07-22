@@ -32,9 +32,9 @@ void Renderer::submitSpotLight(std::shared_ptr<SpotLight> spotLight) {
 
 void Renderer::draw() {
 	defaultShader->use();
-	defaultShader->setMat4("view", activeCam->getViewMatrix());
-	defaultShader->setMat4("projection", projectionMatrix);
-	defaultShader->setVec3("camPos", activeCam->getPosition());
+	defaultShader->set<glm::mat4>("view", activeCam->getViewMatrix());
+	defaultShader->set<glm::mat4>("projection", projectionMatrix);
+	defaultShader->set<glm::vec3>("camPos", activeCam->getWorldPosition());
 
 	int count = 0;
 	for (auto dirLight : directionalLights) {

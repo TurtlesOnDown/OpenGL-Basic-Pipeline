@@ -144,33 +144,39 @@ std::shared_ptr<Mesh> ModelImporter::processMesh(std::shared_ptr<Model> m, aiMes
 }
 
 Material ModelImporter::processMaterial(std::shared_ptr<Model> m, aiMaterial* mat) {
-	Material newMaterial;
-
-	std::string matName = mat->GetName().C_Str();
+	Material newMaterial(mat->GetName().C_Str());
 
 	float shininess = 0.0f;
-	if (AI_SUCCESS == mat->Get(AI_MATKEY_SHININESS, shininess)) {
-		newMaterial.addFloat("shininess", shininess);
-	}
-	
-	proccessTextures(m, newMaterial, mat, aiTextureType_DIFFUSE, "texture_diffuse");
-	proccessTextures(m, newMaterial, mat, aiTextureType_SPECULAR, "texture_specular");
-	proccessTextures(m, newMaterial, mat, aiTextureType_HEIGHT, "texture_normal");
-	proccessTextures(m, newMaterial, mat, aiTextureType_AMBIENT, "texture_height");
+	getMaterialProperty<float>(newMaterial, mat, AI_MATKEY_SHININESS, "shininess", 0.0f);
+	getMaterialProperty<float>(newMaterial, mat, AI_MATKEY_SHININESS_STRENGTH, "shininessStrength", 1.0f);
+	getMaterialProperty<float>(newMaterial, mat, AI_MATKEY_OPACITY, "opacity", 1.0f);
+	getMaterialProperty<int>(newMaterial, mat, AI_MATKEY_BLEND_FUNC, "blend_func", 0.0f);
+
+	getMaterialProperty<glm::vec3>(newMaterial, mat, AI_MATKEY_COLOR_AMBIENT, "ambientColor", {1.0f, 1.0f, 1.0f});
+	getMaterialProperty<glm::vec3>(newMaterial, mat, AI_MATKEY_COLOR_DIFFUSE, "diffuseColor", { 1.0f, 1.0f, 1.0f });
+	getMaterialProperty<glm::vec3>(newMaterial, mat, AI_MATKEY_COLOR_SPECULAR, "specularColor", { 1.0f, 1.0f, 1.0f });
+
+	proccessTextures(m, newMaterial, mat, aiTextureType_DIFFUSE, "textureDiffuse");
+	proccessTextures(m, newMaterial, mat, aiTextureType_SPECULAR, "textureSpecular");
+	proccessTextures(m, newMaterial, mat, aiTextureType_HEIGHT, "textureNormal");
+	proccessTextures(m, newMaterial, mat, aiTextureType_AMBIENT, "textureHeight");
 
 	return newMaterial;
 }
 
 void ModelImporter::proccessTextures(std::shared_ptr<Model> m, Material& mat, aiMaterial* aiMat, aiTextureType type, std::string typeName) {
-	for (unsigned int i = 0; i < aiMat->GetTextureCount(type); i++) {
-		aiString str;
-		aiMat->GetTexture(type, i, &str);
+	if (aiMat->GetTextureCount(type) == 0) return;
 
-		std::shared_ptr<Texture2D> texture = manager->load<Texture2D>(m->path.getDirectory() + str.C_Str());
-		texture->bind();
-		texture->setWrappingParam(GL_REPEAT, GL_REPEAT);
-		texture->setFilteringParam(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
-		texture->unbind();
-		mat.addTexture2D(typeName + std::to_string(i), texture);
-	}
+	aiString str;
+	aiMat->GetTexture(type, 0, &str);
+
+	getMaterialProperty<float>(mat, aiMat, AI_MATKEY_TEXBLEND(type, 0), typeName + "_blend", 1.0f);
+	getMaterialProperty<int>(mat, aiMat, AI_MATKEY_TEXOP(type, 0), typeName + "_op", 0);
+
+	std::shared_ptr<Texture2D> texture = manager->load<Texture2D>(m->path.getDirectory() + str.C_Str());
+	texture->bind();
+	texture->setWrappingParam(GL_REPEAT, GL_REPEAT);
+	texture->setFilteringParam(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR);
+	texture->unbind();
+	mat.add<std::shared_ptr<Texture2D>>(typeName, texture);
 }

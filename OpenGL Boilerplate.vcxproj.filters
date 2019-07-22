@@ -90,6 +90,9 @@
     <ClCompile Include="src\engine\graphics\lights\SpotLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\graphics\error\Glerror.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\objects\Object.h">
@@ -162,6 +165,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\graphics\lights\SpotLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\graphics\error\Glerror.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

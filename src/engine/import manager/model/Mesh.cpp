@@ -50,7 +50,7 @@ void Mesh::bindVAO() {
 }
 
 void Mesh::draw() {
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	OpenGLAPI::drawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 }
 
 void Mesh::setVertices(const std::vector<Vertex>& verts) {

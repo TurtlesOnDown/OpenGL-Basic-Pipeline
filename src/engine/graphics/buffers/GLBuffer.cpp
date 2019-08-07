@@ -3,9 +3,9 @@
 #include "GLBuffer.h"
 
 GLBuffer::GLBuffer() {
-	glGenBuffers(1, &renderID);
+	OpenGLAPI::genBuffers(1, &renderID);
 }
 
 GLBuffer::~GLBuffer() {
-	glDeleteBuffers(1, &renderID);
+	OpenGLAPI::deleteBuffers(1, &renderID);
 }

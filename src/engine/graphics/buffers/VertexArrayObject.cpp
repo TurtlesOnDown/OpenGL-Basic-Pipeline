@@ -3,26 +3,26 @@
 #include "VertexArrayObject.h"
 
 VertexArrayObject::VertexArrayObject() {
-	glGenVertexArrays(1, &renderID);
+	OpenGLAPI::genVertexArray(1, &renderID);
 }
 
 VertexArrayObject::~VertexArrayObject() {
-	glDeleteVertexArrays(1, &renderID);
+	OpenGLAPI::deleteVertexArrays(1, &renderID);
 }
 
 void VertexArrayObject::formatBuffer(const BufferLayout& layout) {
 	const auto elements = layout.getLayout();
 	for (unsigned int i = 0; i < elements.size(); ++i) {
 		const auto element = elements[i];
-		glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.getStride(), (void*)element.offset);
-		glEnableVertexAttribArray(i);
+		OpenGLAPI::vertexAttribPointer(i, element.count, element.type, element.normalized, layout.getStride(), (void*)element.offset);
+		OpenGLAPI::enableVertexAttribArray(i);
 	}
 }
 
 void VertexArrayObject::bind() {
-	glBindVertexArray(renderID);
+	OpenGLAPI::bindVertexArray(renderID);
 }
 
 void VertexArrayObject::unbind() {
-	glBindVertexArray(0);
+	OpenGLAPI::bindVertexArray(0);
 }

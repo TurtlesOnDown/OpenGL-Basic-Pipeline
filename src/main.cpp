@@ -16,9 +16,6 @@
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
 
-ImportManager resourceManager;
-Renderer openGLRenderer;
-
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -56,7 +53,10 @@ int main()
 
 	// glfw window creation
 	// --------------------
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	GLFWwindow *window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	{
+	ImportManager resourceManager;
+	Renderer openGLRenderer;
 	if (window == NULL)
 	{
 		LOG_ERROR("Failed to create GLFW window");
@@ -79,7 +79,7 @@ int main()
 
 	// configure global opengl state
 	// -----------------------------
-	glEnable(GL_DEPTH_TEST);
+	OpenGLAPI::enable(GL_DEPTH_TEST);
 
 
 	//Path untiltedPath("src\\resources\\models\\untitled\\untitled.obj");
@@ -96,7 +96,7 @@ int main()
 	std::shared_ptr<Texture2D> texture = resourceManager.load<Texture2D>("src\\resources\\textures\\container.jpg");
 
 	std::shared_ptr<Material> testMaterial(new Material());
-	testMaterial->add<std::shared_ptr<Texture2D>>("textureDiffuse",texture);
+	testMaterial->add<std::shared_ptr<Texture2D>>("textureDiffuse", texture);
 	testMaterial->add<std::shared_ptr<Texture2D>>("textureSpecular", texture);
 	testMaterial->add<glm::vec3>("diffuseColor", { 0.0f, 0.0f, 1.0f });
 	testMaterial->add<float>("shininess", 96.0f);
@@ -117,11 +117,11 @@ int main()
 	std::shared_ptr<PObject> testObject(new PObject());
 	testObject->addComponent(COMPONENT_TYPE::MODEL, testCube);
 
-	std::shared_ptr<PObject> testObject3(new PObject({3, 0, 0}));
+	std::shared_ptr<PObject> testObject3(new PObject({ 3, 0, 0 }));
 	testObject3->addComponent(COMPONENT_TYPE::MODEL, testCube1);
 	PObject::addChild(testObject, testObject3);
 
-	std::shared_ptr<PObject> testObject4(new PObject({0, 3, 0}));
+	std::shared_ptr<PObject> testObject4(new PObject({ 0, 3, 0 }));
 	testObject4->addComponent(COMPONENT_TYPE::MODEL, testCube2);
 	PObject::addChild(testObject3, testObject4);
 
@@ -136,7 +136,7 @@ int main()
 
 	std::shared_ptr<DirectionalLight> sunLight(new DirectionalLight({ 1.0f, 1.0f, 1.0f }, { 0.0f, 10.0f, 10.0f }));
 	std::shared_ptr<PointLight> cameraLight(new PointLight({ 1.0f, 1.0f, 1.0f }, { 0.0f, 3.0f, 3.0f }));
-	
+
 	//PObject::addChild(camera, flashLight);
 
 	openGLRenderer.setActiveCamera(camera);
@@ -175,7 +175,7 @@ int main()
 		//sunLight->translate({ cos(currentFrame) * 0.05f, 0.0f, 0.0f});
 		//cameraLight->setPosition(camera->getPosition());
 		//flashLight->setPosition(camera->getPosition());
-		testObject->translate({sin(currentFrame) * 0.05f, 0.0f, 0.0f});
+		testObject->translate({ sin(currentFrame) * 0.05f, 0.0f, 0.0f });
 		testObject3->translate({ 0.0f, sin(currentFrame) * 0.05f, 0.0f });
 		testObject4->translate({ 0.0f, 0.0f, sin(currentFrame) * 0.05f });
 		//testObject->rotate(currentFrame *0.002f, { 0, 0, 1 }, SPACE::WORLD);
@@ -185,8 +185,8 @@ int main()
 
 		// render
 		// ------
-		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		OpenGLAPI::clearColor(0.2f, 0.2f, 0.2f, 1.0f);
+		OpenGLAPI::clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//testObject->rotate(sin(currentFrame) * 0.02f, { 1, 1, 0 }, SPACE::LOCAL);
 
@@ -198,7 +198,7 @@ int main()
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-
+	}
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	// ------------------------------------------------------------------
 	glfwTerminate();
@@ -230,7 +230,7 @@ void framebuffer_size_callback(GLFWwindow * window, int width, int height)
 {
 	// make sure the viewport matches the new window dimensions; note that width and 
 	// height will be significantly larger than specified on retina displays.
-	glViewport(0, 0, width, height);
+	OpenGLAPI::viewport(0, 0, width, height);
 }
 
 // glfw: whenever the mouse moves, this callback is called

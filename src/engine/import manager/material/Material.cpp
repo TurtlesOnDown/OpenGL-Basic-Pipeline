@@ -34,6 +34,4 @@ void Material::useMaterial(const std::shared_ptr<Shader> shader) {
 	setValues<float>(shader, floatValues);
 	setValues<glm::vec3>(shader, vec3Values);
 	setValues<glm::mat4>(shader, mat4Values);
-
-	GLGET_ERROR();
 }

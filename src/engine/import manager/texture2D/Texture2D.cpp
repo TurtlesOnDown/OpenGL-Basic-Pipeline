@@ -8,7 +8,7 @@
 #include "../../import manager/ImportManager.h"
 
 Texture2D::Texture2D(Path p):Component(COMPONENT_TYPE::TEXTURE2D), path(p) {
-	glGenTextures(1, &texture);
+	OpenGLAPI::genTextures(1, &texture);
 }
 
 Texture2D::~Texture2D() {
@@ -16,29 +16,29 @@ Texture2D::~Texture2D() {
 }
 
 void Texture2D::bind() {
-	glBindTexture(GL_TEXTURE_2D, texture);
+	OpenGLAPI::bindTexture(GL_TEXTURE_2D, texture);
 }
 
 void Texture2D::unbind() {
-	glBindTexture(GL_TEXTURE_2D, 0);
+	OpenGLAPI::bindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Texture2D::setWrappingParam(int s, int t) {
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, s);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, t);
+	OpenGLAPI::texParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, s);
+	OpenGLAPI::texParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, t);
 }
 
 void Texture2D::setFilteringParam(int min, int mag) {
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag);
+	OpenGLAPI::texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min);
+	OpenGLAPI::texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag);
 }
 
 void Texture2D::genMipMaps() {
-	glGenerateMipmap(GL_TEXTURE_2D);
+	OpenGLAPI::generateMipmap(GL_TEXTURE_2D);
 }
 
 void Texture2D::activateTexture(unsigned int num) {
-	glActiveTexture(GL_TEXTURE0 + num);
+	OpenGLAPI::activeTexture(GL_TEXTURE0 + num);
 	bind();
 }
 
@@ -76,10 +76,10 @@ void Texture2DImporter::importTexture(std::shared_ptr<Texture2D> texture) {
 		else if (texture->nrChannels == 4)
 			format = GL_RGBA;
 
-		glTexImage2D(GL_TEXTURE_2D, 0, format, texture->width, texture->height, 0, format, GL_UNSIGNED_BYTE, data);
+		OpenGLAPI::texImage2D(GL_TEXTURE_2D, 0, format, texture->width, texture->height, 0, format, GL_UNSIGNED_BYTE, data);
 		texture->setWrappingParam();
 		texture->setFilteringParam();
-		glGenerateMipmap(GL_TEXTURE_2D);
+		OpenGLAPI::generateMipmap(GL_TEXTURE_2D);
 	}
 	else
 	{

@@ -150,11 +150,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\engine\common\Log.cpp" />
+    <ClCompile Include="src\engine\core\Application.cpp" />
     <ClCompile Include="src\engine\graphics\lights\DirectionalLight.cpp" />
     <ClCompile Include="src\engine\graphics\lights\Light.cpp" />
     <ClCompile Include="src\engine\graphics\lights\PointLight.cpp" />
     <ClCompile Include="src\engine\graphics\lights\SpotLight.cpp" />
     <ClCompile Include="src\engine\graphics\renderer\Renderer.cpp" />
+    <ClCompile Include="src\engine\platform\glfwWindow\GLFWWindow.cpp" />
     <ClCompile Include="src\engine\platform\opengl\OpenGLAPI.cpp" />
     <ClCompile Include="src\engine\precompiled header\Includes.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -183,11 +185,14 @@
   <ItemGroup>
     <ClInclude Include="Dependancies\Includes\stb_image\stb_image.h" />
     <ClInclude Include="src\engine\common\Log.h" />
+    <ClInclude Include="src\engine\core\Application.h" />
+    <ClInclude Include="src\engine\core\Window.h" />
     <ClInclude Include="src\engine\graphics\lights\DirectionalLight.h" />
     <ClInclude Include="src\engine\graphics\lights\Light.h" />
     <ClInclude Include="src\engine\graphics\lights\PointLight.h" />
     <ClInclude Include="src\engine\graphics\lights\SpotLight.h" />
     <ClInclude Include="src\engine\graphics\renderer\Renderer.h" />
+    <ClInclude Include="src\engine\platform\glfwWindow\GLFWWindow.h" />
     <ClInclude Include="src\engine\platform\opengl\OpenGLAPI.h" />
     <ClInclude Include="src\engine\precompiled header\Includes.h" />
     <ClInclude Include="src\engine\common\Path.h" />

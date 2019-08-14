@@ -20,6 +20,10 @@ public:
 	PObject(glm::vec3 pos = { 0.0f, 0.0f, 0.0f }, glm::vec3 s = {1.0f, 1.0f, 1.0f});
 	virtual ~PObject() override;
 
+	virtual void onUpdate() override;
+	virtual void onEvent(Event &e) override;
+	void onUpdateChildren();
+
 	void translate(glm::vec3 trans);
 	void scaleAdd(glm::vec3 s);
 	void scaleMult(glm::vec3 s);

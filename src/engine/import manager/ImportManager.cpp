@@ -2,6 +2,8 @@
 
 #include "ImportManager.h"
 
+ImportManager ImportManager::resourceManager;
+
 ImportManager::ImportManager():
 	models(this),
 	textures2D(this) ,

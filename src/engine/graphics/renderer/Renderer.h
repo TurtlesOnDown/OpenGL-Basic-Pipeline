@@ -21,6 +21,8 @@ public:
 	void setDefaultShader(std::shared_ptr<Shader> shader);
 	void setActiveCamera(std::shared_ptr<Camera> cam);
 	void setProjectionMatrix(float FOV, float aspectRatio, float nearPlane, float farPlane);
+
+	static Renderer &getRenderer() { return *renderer; }
 private:
 	std::vector<std::shared_ptr<PObject>> objects;
 	std::vector <std::shared_ptr<DirectionalLight>> directionalLights;
@@ -31,4 +33,5 @@ private:
 	std::shared_ptr<Shader> defaultShader;
 	glm::mat4 projectionMatrix;
 
+	static std::unique_ptr<Renderer> renderer;
 };

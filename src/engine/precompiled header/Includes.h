@@ -6,6 +6,8 @@
 #include <map>
 #include <unordered_map>
 #include <algorithm>
+#include <functional>
+#include <sstream>
 
 #include <queue>
 #include <memory>

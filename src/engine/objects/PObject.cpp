@@ -15,6 +15,20 @@ PObject::~PObject() {
 
 }
 
+void PObject::onUpdate() {
+
+}
+void PObject::onEvent(Event &e) {
+
+}
+
+void PObject::onUpdateChildren() {
+	onUpdate();
+	for (auto child : children) {
+		child->onUpdateChildren();
+	}
+}
+
 void PObject::translate(glm::vec3 trans) {
 	localPosition += trans;
 }

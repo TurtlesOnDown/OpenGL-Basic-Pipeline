@@ -21,6 +21,9 @@ public:
 	Component(COMPONENT_TYPE t);
 	virtual ~Component() override;
 
+	virtual void onUpdate() override {};
+	virtual void onEvent(Event &e) override {};
+
 protected:
 	const COMPONENT_TYPE type;
 };

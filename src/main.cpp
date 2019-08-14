@@ -1,22 +1,17 @@
 #include "Includes.h"
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <stb_image/stb_image.h>
+#include "engine/core/Application.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+extern Application *CreateApplication();
 
-#include "engine/import manager/ImportManager.h"
-#include "engine/graphics/renderer/Renderer.h"
+int main() {
+	Log::init();
+	auto app = CreateApplication();
+	app->Run();
+	delete app;
+}
 
-#include <iostream>
-
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/basic_file_sink.h"
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+/*void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
@@ -256,4 +251,4 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	//flashLight->rotate(mouseX_Sensitivity * mouse_delta.x, { 0, 1, 0 }, SPACE::WORLD);
 	//flashLight->rotate(mouseX_Sensitivity * mouse_delta.y, { 1, 0, 0 }, SPACE::LOCAL);
 	
-}
+}*/

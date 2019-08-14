@@ -3,6 +3,7 @@
 #include "Includes.h"
 
 #include <GLFW/glfw3.h>
+#include "events/Event.h"
 
 struct WindowConfigs {
 	std::string name = "Default Name";
@@ -18,6 +19,8 @@ struct WindowConfigs {
 
 class Window {
 public:
+	using EventCallbackFunc = std::function<void(Event &)>;
+
 	virtual ~Window() = default;
 
 	virtual void onUpdate() = 0;
@@ -25,7 +28,7 @@ public:
 	virtual unsigned int getWidth() const = 0;
 	virtual unsigned int getHeight() const = 0;
 
-	virtual void setEventCallback() = 0; // TODO: Make event system
+	virtual void setEventCallback(const EventCallbackFunc &callback) = 0; // TODO: Make event system
 
 	virtual void *getPlatformWindow() const = 0;
 

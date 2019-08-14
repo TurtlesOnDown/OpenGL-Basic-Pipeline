@@ -151,11 +151,14 @@
     </ClCompile>
     <ClCompile Include="src\engine\common\Log.cpp" />
     <ClCompile Include="src\engine\core\Application.cpp" />
+    <ClCompile Include="src\engine\core\layers\Layer.cpp" />
+    <ClCompile Include="src\engine\core\layers\LayerStack.cpp" />
     <ClCompile Include="src\engine\graphics\lights\DirectionalLight.cpp" />
     <ClCompile Include="src\engine\graphics\lights\Light.cpp" />
     <ClCompile Include="src\engine\graphics\lights\PointLight.cpp" />
     <ClCompile Include="src\engine\graphics\lights\SpotLight.cpp" />
     <ClCompile Include="src\engine\graphics\renderer\Renderer.cpp" />
+    <ClCompile Include="src\engine\graphics\scene\Scene.cpp" />
     <ClCompile Include="src\engine\platform\glfwWindow\GLFWWindow.cpp" />
     <ClCompile Include="src\engine\platform\opengl\OpenGLAPI.cpp" />
     <ClCompile Include="src\engine\precompiled header\Includes.cpp">
@@ -180,18 +183,27 @@
     <ClCompile Include="src\engine\objects\PObject.cpp" />
     <ClCompile Include="src\engine\objects\Component.cpp" />
     <ClCompile Include="src\engine\objects\Object.cpp" />
+    <ClCompile Include="src\example.cpp" />
+    <ClCompile Include="src\ExampleObject.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependancies\Includes\stb_image\stb_image.h" />
     <ClInclude Include="src\engine\common\Log.h" />
     <ClInclude Include="src\engine\core\Application.h" />
+    <ClInclude Include="src\engine\core\events\ApplicationEvent.h" />
+    <ClInclude Include="src\engine\core\events\Event.h" />
+    <ClInclude Include="src\engine\core\events\KeyEvent.h" />
+    <ClInclude Include="src\engine\core\events\MouseEvent.h" />
+    <ClInclude Include="src\engine\core\layers\Layer.h" />
+    <ClInclude Include="src\engine\core\layers\LayerStack.h" />
     <ClInclude Include="src\engine\core\Window.h" />
     <ClInclude Include="src\engine\graphics\lights\DirectionalLight.h" />
     <ClInclude Include="src\engine\graphics\lights\Light.h" />
     <ClInclude Include="src\engine\graphics\lights\PointLight.h" />
     <ClInclude Include="src\engine\graphics\lights\SpotLight.h" />
     <ClInclude Include="src\engine\graphics\renderer\Renderer.h" />
+    <ClInclude Include="src\engine\graphics\scene\Scene.h" />
     <ClInclude Include="src\engine\platform\glfwWindow\GLFWWindow.h" />
     <ClInclude Include="src\engine\platform\opengl\OpenGLAPI.h" />
     <ClInclude Include="src\engine\precompiled header\Includes.h" />
@@ -211,6 +223,7 @@
     <ClInclude Include="src\engine\objects\PObject.h" />
     <ClInclude Include="src\engine\objects\Component.h" />
     <ClInclude Include="src\engine\objects\Object.h" />
+    <ClInclude Include="src\ExampleObject.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\resources\shaders\basic\basic.frag" />

@@ -34,7 +34,11 @@ public:
 		return models.load(file);
 	}
 
+	static ImportManager &getResourceManager() { return resourceManager; }
+
 private:
+	static ImportManager resourceManager;
+
 	ModelImporter models;
 	Texture2DImporter textures2D;
 	ShaderImporter shaders;

@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+std::unique_ptr<Renderer> Renderer::renderer = std::make_unique<Renderer>();
 
 Renderer::Renderer(std::shared_ptr<Camera> cam, std::shared_ptr<Shader> shader):activeCam(cam), defaultShader(shader) {
 

@@ -77,7 +77,7 @@ void ModelImporter::processNode(std::shared_ptr<Model> m, aiNode* node, const ai
 }
 
 void ModelImporter::processMeshAndMaterial(std::shared_ptr<Model> m, aiMesh* mesh, const aiScene* scene) {
-	Material newMat = processMaterial(m, scene->mMaterials[mesh->mMaterialIndex]);
+	MaterialConfig newMat = processMaterial(m, scene->mMaterials[mesh->mMaterialIndex]);
 	std::shared_ptr<Mesh> newMesh = processMesh(m, mesh, scene);
 
 	m->meshes.push_back(newMesh);
@@ -143,8 +143,8 @@ std::shared_ptr<Mesh> ModelImporter::processMesh(std::shared_ptr<Model> m, aiMes
 	return ret;
 }
 
-Material ModelImporter::processMaterial(std::shared_ptr<Model> m, aiMaterial* mat) {
-	Material newMaterial(mat->GetName().C_Str());
+MaterialConfig ModelImporter::processMaterial(std::shared_ptr<Model> m, aiMaterial* mat) {
+	MaterialConfig newMaterial;
 
 	float shininess = 0.0f;
 	getMaterialProperty<float>(newMaterial, mat, AI_MATKEY_SHININESS, "shininess", 0.0f);
@@ -164,7 +164,7 @@ Material ModelImporter::processMaterial(std::shared_ptr<Model> m, aiMaterial* ma
 	return newMaterial;
 }
 
-void ModelImporter::proccessTextures(std::shared_ptr<Model> m, Material& mat, aiMaterial* aiMat, aiTextureType type, std::string typeName) {
+void ModelImporter::proccessTextures(std::shared_ptr<Model> m, MaterialConfig & mat, aiMaterial* aiMat, aiTextureType type, std::string typeName) {
 	if (aiMat->GetTextureCount(type) == 0) return;
 
 	aiString str;

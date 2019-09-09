@@ -4,6 +4,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "../../import manager/material/Material.h"
 
 std::unique_ptr<Renderer> Renderer::renderer = std::make_unique<Renderer>();
 
@@ -32,31 +33,35 @@ void Renderer::submitSpotLight(std::shared_ptr<SpotLight> spotLight) {
 }
 
 void Renderer::draw() {
-	defaultShader->use();
-	defaultShader->set<glm::mat4>("view", activeCam->getViewMatrix());
-	defaultShader->set<glm::mat4>("projection", projectionMatrix);
-	defaultShader->set<glm::vec3>("camPos", activeCam->getWorldPosition());
-
-	int count = 0;
-	for (auto dirLight : directionalLights) {
-		dirLight->use(defaultShader, count);
-		count++;
-	}
-
-	count = 0;
-	for (auto pointLight : pointLights) {
-		pointLight->use(defaultShader, count);
-		count++;
-	}
-
-	count = 0;
-	for (auto spotLight : spotLights) {
-		spotLight->use(defaultShader, count);
-		count++;
-	}
+		// TODO: make this based on material not on object
 
 	for (auto obj : objects) {
-		obj->draw(defaultShader);
+		auto material = std::dynamic_pointer_cast<Material>(obj->getComponent(COMPONENT_TYPE::MATERIAL));
+		auto &shader = material->getShader();
+		shader->use();
+		shader->set<glm::mat4>("view", activeCam->getViewMatrix());
+		shader->set<glm::mat4>("projection", activeCam->getPerspectiveMatrix());
+		shader->set<glm::vec3>("camPos", activeCam->getWorldPosition());
+
+		int count = 0;
+		for (auto dirLight : directionalLights) {
+			dirLight->use(shader, count);
+			count++;
+		}
+
+		count = 0;
+		for (auto pointLight : pointLights) {
+			pointLight->use(shader, count);
+			count++;
+		}
+
+		count = 0;
+		for (auto spotLight : spotLights) {
+			spotLight->use(shader, count);
+			count++;
+		}
+
+		obj->draw(material);
 	}
 }
 
@@ -66,8 +71,4 @@ void Renderer::setDefaultShader(std::shared_ptr<Shader> shader) {
 
 void Renderer::setActiveCamera(std::shared_ptr<Camera> cam) {
 	activeCam = cam;
-}
-
-void Renderer::setProjectionMatrix(float FOV, float aspectRatio, float nearPlane, float farPlane) {
-	projectionMatrix = glm::perspective(FOV, aspectRatio, nearPlane, farPlane);
 }

@@ -109,7 +109,7 @@ void PObject::addChild(std::shared_ptr<PObject> parent, std::shared_ptr<PObject>
 	child->parent = parent;
 }
 
-void PObject::draw(const std::shared_ptr<Shader> shader) {
+void PObject::draw(const std::shared_ptr<Material> material) {
 	std::shared_ptr<Model> modelMesh;
 
 	if (components.find(COMPONENT_TYPE::MODEL) != components.end()) {
@@ -121,12 +121,12 @@ void PObject::draw(const std::shared_ptr<Shader> shader) {
 	}
 
 	auto meshes = modelMesh->getMeshes();
-	auto materials = modelMesh->getMaterials();
+	auto materialConfigs = modelMesh->getMaterials();
 
-	for (auto mats : materials) {
+	for (auto mats : materialConfigs) {
 
-		mats.second.useMaterial(shader);
-		shader->set<glm::mat4>("model", getModelMatrix());
+		material->useMaterial(mats.second);
+		material->getShader()->set<glm::mat4>("model", getModelMatrix());
 
 		meshes[mats.first]->bindVAO();
 		meshes[mats.first]->draw();

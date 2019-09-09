@@ -42,7 +42,7 @@ public:
 
 	template<typename T>
 	bool dispatch(std::function<bool(T &)> func) {
-		if (event.getEventType() == T::GetStaticType()) {
+		if (event.getEventType() == T::getStaticType()) {
 			event.handled = func(*(T*)&event);
 			return true;
 		}

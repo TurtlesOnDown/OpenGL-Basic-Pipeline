@@ -6,11 +6,13 @@
 #include "../graphics/renderer/Renderer.h"
 #include "layers/LayerStack.h"
 
+#include "events/ApplicationEvent.h"
+
 class Application {
 public:
 	Application();
 
-	virtual ~Application() = default;
+	virtual ~Application();
 
 	void Run();
 
@@ -22,6 +24,8 @@ public:
 	inline Window &GetWindow() { return *appWindow; };
 
 	inline static Application &Get() { return *instance; };
+
+	bool onWindowClose(WindowCloseEvent &e);
 private:
 	LayerStack layerStack;
 	std::unique_ptr<Window> appWindow;

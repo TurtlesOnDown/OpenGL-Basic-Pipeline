@@ -23,31 +23,37 @@ public:
 
 	template<>
 	void set<bool>(const std::string &name, bool value) {
-		glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+		glUniform1i(uniforms[name].second, value);
 	}
 
 	template<>
 	void set<int>(const std::string &name, int value) {
-		glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+		glUniform1i(uniforms[name].second, value);
 	}
 
 	template<>
 	void set<float>(const std::string &name, float value) {
-		glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+		glUniform1f(uniforms[name].second, value);
 	}
 
 	template<>
 	void set<glm::vec3>(const std::string &name, glm::vec3 value) {
-		glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+		glUniform3fv(uniforms[name].second, 1, &value[0]);
 	}
 
 	template<>
 	void set<glm::mat4>(const std::string &name, glm::mat4 value) {
-		glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &value[0][0]);
+		glUniformMatrix4fv(uniforms[name].second, 1, GL_FALSE, &value[0][0]);
 	}
+
+	const std::map<std::string, std::pair<GLenum, int>> &getUniforms() { return uniforms; }
+	const std::map<std::string, unsigned int> &getUniformBlocks() { return uniformBlockIndexes; }
 
 private:
 	unsigned int ID;
+	std::map<std::string, std::pair<GLenum, int>> uniforms;
+	std::map<std::string, unsigned int> uniformBlockIndexes;
+
 
 	Path path;
 
@@ -69,6 +75,11 @@ private:
 	void importShader(std::shared_ptr<Shader> shader);
 	void compileShader(std::shared_ptr<Shader> shader, std::string vertPath, std::string fragPath);
 	void checkCompileErrors(unsigned int shader, std::string type);
+
+	void getUniformLoc(std::shared_ptr<Shader> shader, char *name, GLenum type);
+
+	void getUniforms(std::shared_ptr<Shader> shader);
+	void getUniformBlocks(std::shared_ptr<Shader> shader);
 };
 #endif // !SHADER
 

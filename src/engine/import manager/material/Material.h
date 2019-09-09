@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Includes.h"
+#include <any>
 
 #include "../../objects/Component.h"
 
@@ -9,75 +10,76 @@
 
 // Material class to contain textures and parameters
 
-class Material : public Component {
-public:
-	Material();
-	Material(std::string name);
-	~Material();
-	Material operator=(const Material& m);
+struct MaterialConfig {
+	std::map<std::string, std::any> properties;
 
 	template<typename T>
 	void add(const std::string &name, T value) {
-		LOG_WARN("MATERIAL::INVALID TYPE ADDED");
+		LOG_WARN("MATERIALCONFIG::INVALID TYPE ADDED");
 	}
 
 	template<>
 	void add<std::shared_ptr<Texture2D>>(const std::string &name, std::shared_ptr<Texture2D> value) {
-		textures2D[name] = value;
+		properties[name] =  value;
 	}
 
 	template<>
 	void add<bool>(const std::string &name, bool value) {
-		boolValues[name] = value;
+		properties[name] = value;
 	}
 
 	template<>
 	void add<int>(const std::string &name, int value) {
-		intValues[name] = value;
+		properties[name] = value;
 	}
 
 	template<>
 	void add<float>(const std::string &name, float value) {
-		floatValues[name] = value;
+		properties[name] = value;
 	}
 
 	template<>
 	void add<glm::vec3>(const std::string &name, glm::vec3 value) {
-		vec3Values[name] = value;
+		properties[name] = value;
 	}
 
 	template<>
 	void add<glm::mat4>(const std::string &name, glm::mat4 value) {
-		mat4Values[name] = value;
+		properties[name] = value;
 	}
 
-	void useMaterial(const std::shared_ptr<Shader> s);
+};
+
+class Material : public Component {
+public:
+	Material(const std::shared_ptr<Shader> s);
+	~Material();
+
+	void useShader();
+	void useMaterial(const MaterialConfig &con);
+
+	inline const std::shared_ptr<Shader> &getShader() { return shader; }
 
 private:
 	std::string matName;
-	std::map<std::string, std::shared_ptr<Texture2D>> textures2D;
-	std::map<std::string, bool> boolValues;
-	std::map<std::string, int> intValues;
-	std::map<std::string, float> floatValues;
-	std::map<std::string, glm::vec3> vec3Values;
-	std::map<std::string, glm::mat4> mat4Values;
+
+	MaterialConfig config;
+	std::map<std::string, int> textureMappings;
+	const std::shared_ptr<Shader> shader;
+
+	void useConfigProperty(const std::string &prop, const std::any &value);
 
 	template<typename T>
-	void setValues(const std::shared_ptr<Shader> shader, std::map<std::string, T> values) {
-		for (auto x : values) {
-			shader->set<T>("material." + x.first, x.second);
-		}
+	void setValue(std::string name, T value) {
+		shader->set<T>("material." + name, value);
 	}
 
 	template<>
-	void setValues<std::shared_ptr<Texture2D>>(const std::shared_ptr<Shader> shader, std::map<std::string, std::shared_ptr<Texture2D>> values) {
-		int count = 0;
-		for (auto texture : values) {
-			texture.second->activateTexture(count);
-			shader->set<int>("material." + texture.first, count);
-			count++;
+	void setValue<std::shared_ptr<Texture2D>>(std::string name, std::shared_ptr<Texture2D> value) {
+		if (value == nullptr) return; // TODO: create default texture, or create better solution for null textures
+		value->activateTexture(textureMappings[name]);
+		shader->set<int>("material." + name, textureMappings[name]);
 
-			texture.second->bind();
-		}
+		value->bind();
 	}
 };

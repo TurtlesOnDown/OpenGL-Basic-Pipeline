@@ -18,13 +18,13 @@ public:
 
 	void setIndividualVAO(bool a) { individualVAO = a; }
 
-	void setMaterial(unsigned int index, Material m) { mats[index].second = m; } // clean this up
+	void setMaterialConfig(unsigned int index, MaterialConfig m) { mats[index].second = m; } // clean this up
 
-	const std::vector<std::pair<unsigned int, Material>> &getMaterials() const { return mats; }
+	const std::vector<std::pair<unsigned int, MaterialConfig>> &getMaterials() const { return mats; }
 	const std::vector<std::shared_ptr<Mesh>>& getMeshes() const { return meshes; }
 private:
 	std::vector<std::shared_ptr<Mesh>> meshes;
-	std::vector<std::pair<unsigned int, Material>> mats;
+	std::vector<std::pair<unsigned int, MaterialConfig>> mats;
 	Path path;
 	bool individualVAO = true;
 
@@ -48,13 +48,13 @@ private:
 	void processNode(std::shared_ptr<Model> m, aiNode* node, const aiScene* scene);
 	void processMeshAndMaterial(std::shared_ptr<Model> m, aiMesh* mesh, const aiScene* scene);
 	std::shared_ptr<Mesh> processMesh(std::shared_ptr<Model> m, aiMesh* mesh, const aiScene* scene);
-	Material processMaterial(std::shared_ptr<Model> m, aiMaterial* mat);
-	void proccessTextures(std::shared_ptr<Model> m, Material& mat, aiMaterial* aiMat, aiTextureType type, std::string typeName);
+	MaterialConfig processMaterial(std::shared_ptr<Model> m, aiMaterial* mat);
+	void proccessTextures(std::shared_ptr<Model> m, MaterialConfig & mat, aiMaterial* aiMat, aiTextureType type, std::string typeName);
 
 	std::shared_ptr<Model> copyModel(std::shared_ptr<Model> m);
 
 	template<typename T>
-	void getMaterialProperty(Material &newMaterial, aiMaterial *mat, const char *pKey, unsigned int type, unsigned int idx, std::string matProperty, T defaultValue) {
+	void getMaterialProperty(MaterialConfig &newMaterial, aiMaterial *mat, const char *pKey, unsigned int type, unsigned int idx, std::string matProperty, T defaultValue) {
 		T value;
 		if (AI_SUCCESS == mat->Get(pKey, type, idx, value)) {
 			newMaterial.add<T>(matProperty, value);
@@ -65,7 +65,7 @@ private:
 	}
 
 	template<>
-	void getMaterialProperty<glm::vec3>(Material &newMaterial, aiMaterial *mat, const char *pKey, unsigned int type, unsigned int idx, std::string matProperty, glm::vec3 defaultValue) {
+	void getMaterialProperty<glm::vec3>(MaterialConfig &newMaterial, aiMaterial *mat, const char *pKey, unsigned int type, unsigned int idx, std::string matProperty, glm::vec3 defaultValue) {
 		aiColor3D color;
 		glm::vec3 value;
 		if (AI_SUCCESS == mat->Get(pKey, type, idx, color)) {

@@ -3,7 +3,7 @@
 #include "Object.h"
 #include <glm/gtc/quaternion.hpp>
 
-#include "../import manager/shader/Shader.h"
+#include "../import manager/material/Material.h"
 #include "Component.h"
 
 #ifndef POBJECTCLASS
@@ -49,8 +49,10 @@ public:
 
 	static void addChild(std::shared_ptr<PObject> parent, std::shared_ptr<PObject> child);
 	inline void addComponent(COMPONENT_TYPE type, std::shared_ptr<Component> comp) { components[type] = comp; }
+	
+	inline const std::shared_ptr<Component> getComponent(COMPONENT_TYPE type) { return components[type]; }
 
-	void draw(const std::shared_ptr<Shader> shader);
+	void draw(const std::shared_ptr<Material> material);
 
 protected:
 	glm::vec3 localPosition;

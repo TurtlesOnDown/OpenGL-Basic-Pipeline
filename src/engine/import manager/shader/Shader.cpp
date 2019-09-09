@@ -114,6 +114,8 @@ void ShaderImporter::compileShader(std::shared_ptr<Shader> shader, std::string v
 	glAttachShader(shader->ID, fragment);
 	glLinkProgram(shader->ID);
 	checkCompileErrors(shader->ID, "PROGRAM");
+	getUniforms(shader);
+	getUniformBlocks(shader);
 	// delete the shaders as they're linked into our program now and no longer necessary
 	glDeleteShader(vertex);
 	glDeleteShader(fragment);
@@ -140,4 +142,51 @@ void ShaderImporter::checkCompileErrors(unsigned int shader, std::string type) {
 			LOG_ERROR("SHADER::LINKING ERROR::{0}::{1}", type, infoLog);
 		}
 	}
+}
+
+void ShaderImporter::getUniformLoc(std::shared_ptr<Shader> shader, char *name, GLenum type) {
+	int index = glGetUniformLocation(shader->ID, name);
+	if (index != -1) {
+		shader->uniforms[name] = { type, index };
+	}
+}
+
+void ShaderImporter::getUniforms(std::shared_ptr<Shader> shader) {
+	int uniformCount;
+	glGetProgramiv(shader->ID, GL_ACTIVE_UNIFORMS, &uniformCount);
+	if (uniformCount == 0) return;
+
+	int maxNameLength;
+	glGetProgramiv(shader->ID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxNameLength);
+	char *name = new char[maxNameLength];
+
+	int nameLength;
+	int variableSize;
+	GLenum variableType;
+
+	for (auto i = 0; i < uniformCount; i++) {
+		glGetActiveUniform(shader->ID, (GLuint)i, maxNameLength, &nameLength, &variableSize, &variableType, name);
+		getUniformLoc(shader, name, variableType);
+	}
+
+	delete[] name;
+}
+
+void ShaderImporter::getUniformBlocks(std::shared_ptr<Shader> shader) {
+	int uniformBlockCount;
+	glGetProgramiv(shader->ID, GL_ACTIVE_UNIFORM_BLOCKS, &uniformBlockCount);
+	if (uniformBlockCount == 0) return;
+
+	int maxNameLength;
+	glGetProgramiv(shader->ID, GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH, &maxNameLength);
+	char *name = new char[maxNameLength];
+
+	int nameLength;
+
+	for (auto i = 0; i < uniformBlockCount; i++) {
+		glGetActiveUniformBlockName(shader->ID, (GLuint)i, maxNameLength, &nameLength,  name);
+		shader->uniformBlockIndexes[name] = i;
+	}
+
+	delete[] name;
 }

@@ -60,6 +60,10 @@ in vec3 Normal;
 in vec3 FragPos;
 in mat3 TBN;
 
+layout (std140) uniform testUniformBlock {
+	float test;
+} testBlock;
+
 uniform DirectLight dirLights[DIRECT_LIGHT_COUNT];
 uniform PointLight pointLights[POINT_LIGHT_COUNT];
 uniform SpotLight spotLights[SPOT_LIGHT_COUNT];
@@ -78,6 +82,8 @@ void main()
 	norm = normalize(TBN * norm);
 	norm = normalize(Normal);
 	vec3 viewDir = normalize(camPos - FragPos);
+
+	float testFloat = testBlock.test;
 
 	vec3 result = vec3(0.0f, 0.0f, 0.0f);
 	for (int i = 0; i < DIRECT_LIGHT_COUNT; i++) {

@@ -2,7 +2,7 @@
 
 #include "ImportManager.h"
 
-ImportManager ImportManager::resourceManager;
+std::unique_ptr<ImportManager> ImportManager::resourceManager = std::make_unique<ImportManager>();
 
 ImportManager::ImportManager():
 	models(this),

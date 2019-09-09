@@ -2,12 +2,24 @@
 
 #include "Camera.h"
 
-Camera::Camera(glm::vec3 pos):PObject(pos) {
+Camera::Camera(glm::mat4 perspMatrix, PERSPECTIVE_CONFIG c, glm::vec3 pos):
+			PObject(pos), config(c), 
+			perspectiveMatrix(perspMatrix) {
 	updateViewMatrix();
 }
 
 Camera::~Camera() {
 
+}
+
+void Camera::setPerspectiveMatrix(float FOV, float aspectRatio, float nearPlane, float farPlane) {
+	config = PERSPECTIVE_CONFIG::PROJECTION;
+	perspectiveMatrix = glm::perspective(FOV, aspectRatio, nearPlane, farPlane);
+}
+
+void Camera::setOrthographicMatrix(float left, float right, float bottom, float top, float zNear, float zFar) {
+	config = PERSPECTIVE_CONFIG::ORTHOGRAPHIC;
+	perspectiveMatrix = glm::ortho(left, right, bottom, top, zNear, zFar);
 }
 
 const glm::mat4 &Camera::getViewMatrix() {

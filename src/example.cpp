@@ -17,18 +17,18 @@ public:
 
 		OpenGLAPI::enable(GL_DEPTH_TEST);
 
-		camera = std::make_shared<Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
+		int width = Application::Get().GetWindow().getWidth();
+		int height = Application::Get().GetWindow().getHeight();
+		camera = std::make_shared<Camera>(glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f), PERSPECTIVE_CONFIG::PROJECTION, glm::vec3(0.0f, 0.0f, 3.0f));
 		shader = ImportManager::getResourceManager().load<Shader>("src\\resources\\shaders\\basic\\basic.shad");
 		sunLight = std::make_shared<DirectionalLight>(glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec3{ 0.0f, 10.0f, 10.0f });
+
+		std::shared_ptr<Material> testMarterial = std::make_shared<Material>(shader); // TODO: Remove this later
 
 		auto &renderer = Renderer::getRenderer();
 
 		renderer.setActiveCamera(camera); // TODO: fix this by unknown solution
 		renderer.setDefaultShader(shader); // TODO: Fix this by making the shader part of the material
-
-		int width = Application::Get().GetWindow().getWidth();
-		int height = Application::Get().GetWindow().getHeight();
-		renderer.setProjectionMatrix(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f); // TODO: make the projection matrix controlled by the camera
 
 		renderer.submitDirectionalLight(sunLight);
 
@@ -62,7 +62,7 @@ public:
 	}
 
 	~ExampleApp() {
-
+		
 	}
 };
 

@@ -34,10 +34,11 @@ public:
 		return models.load(file);
 	}
 
-	static ImportManager &getResourceManager() { return resourceManager; }
+	static ImportManager &getResourceManager() { return *resourceManager; }
+	static void destroyManager() { resourceManager.reset(); }
 
 private:
-	static ImportManager resourceManager;
+	static std::unique_ptr<ImportManager> resourceManager;
 
 	ModelImporter models;
 	Texture2DImporter textures2D;
